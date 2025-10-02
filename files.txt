@@ -1,0 +1,244 @@
+src
+├── App.css
+├── App.jsx
+├── assets
+│   └── react.svg
+├── Components
+│   ├── Charts
+│   │   └── TransactionChart.jsx
+│   ├── ComboBox.jsx
+│   ├── DataTable.jsx
+│   ├── DateRangeCalender.jsx
+│   ├── DoctorTimeSlotes
+│   │   ├── Add.jsx
+│   │   ├── Delete.jsx
+│   │   └── TimeSlotes.jsx
+│   ├── ErrorPage.jsx
+│   ├── ForgetPassword.jsx
+│   ├── IsdModal.jsx
+│   ├── LiveClock.jsx
+│   ├── Loading.jsx
+│   ├── MedicineAutocomplete.jsx
+│   ├── MultiTaginput.jsx
+│   ├── NotAuth.jsx
+│   ├── Notification.jsx
+│   ├── Pagination.jsx
+│   ├── QrScanner.jsx
+│   ├── ui
+│   │   ├── button.jsx
+│   │   ├── Command.jsx
+│   │   ├── Dialog.jsx
+│   │   ├── input.jsx
+│   │   └── Popover.jsx
+│   ├── UpdatePassword.jsx
+│   ├── UsersComboBox.jsx
+│   ├── VideoTimeSlotes
+│   │   ├── Add.jsx
+│   │   ├── Delete.jsx
+│   │   └── TimeSlotes.jsx
+│   └── Vitals
+│       ├── BloodPressure.jsx
+│       ├── BloodSugar.jsx
+│       ├── Spo2.jsx
+│       ├── Temp.jsx
+│       └── Weigjht.jsx
+├── Controllers
+│   ├── admin.js
+│   ├── apiAddress.js
+│   ├── ApiControllers.js
+│   ├── api.js
+│   ├── configs.js
+│   ├── Currencies.js
+│   ├── currency.js
+│   ├── dateConfig.js
+│   ├── firebase.config.js
+│   ├── image.js
+│   ├── ISDCODES.js
+│   ├── logout.js
+│   ├── PageName.js
+│   ├── printPDF.js
+│   ├── reLogin.js
+│   ├── ShowToast.js
+│   ├── today.js
+│   ├── token.js
+│   └── Wallet.js
+├── ErrorBoundary.jsx
+├── Global
+│   ├── Dashboard.jsx
+│   ├── ShowChakraToast.jsx
+│   ├── Sidebar.jsx
+│   └── Topbar.jsx
+├── Hooks
+│   ├── CancellationReqBadge.jsx
+│   ├── HasPermission.jsx
+│   ├── Medicines.jsx
+│   ├── SettingData.jsx
+│   ├── ShowRating.jsx
+│   ├── StatusBadge.jsx
+│   ├── UseAllPermissions.jsx
+│   ├── UseAppointmentData.jsx
+│   ├── useDebounce.jsx
+│   ├── UseDoctorData.jsx
+│   ├── UsePatientsData.jsx
+│   ├── UserRolesData.jsx
+│   ├── Users.jsx
+│   ├── UseSearchFilter.jsx
+│   └── UseTransaction.jsx
+├── index.css
+├── lib
+│   ├── UpdateUser.jsx
+│   └── utils.js
+├── main.jsx
+└── Pages
+    ├── Appointments
+    │   ├── AddNewAppointment.jsx
+    │   ├── AppointmentLog.jsx
+    │   ├── AppointmentsByPatientID.jsx
+    │   ├── AppontmentCalender.jsx
+    │   ├── AvailableTimeSlotes.jsx
+    │   ├── index.jsx
+    │   ├── PaymentStatusPaid.jsx
+    │   ├── RescheduleAppointment.jsx
+    │   └── Update.jsx
+    ├── Checkin
+    │   ├── Add.jsx
+    │   ├── Delete.jsx
+    │   ├── Index.jsx
+    │   ├── Queue.jsx
+    │   └── Update.jsx
+    ├── Cities
+    │   ├── Add.jsx
+    │   ├── Delete.jsx
+    │   ├── Index.jsx
+    │   └── Update.jsx
+    ├── Contact-us
+    │   ├── Delete.jsx
+    │   ├── Index.jsx
+    │   └── Update.jsx
+    ├── Coupons
+    │   ├── Add.jsx
+    │   ├── AllCoupon.jsx
+    │   ├── Delete.jsx
+    │   ├── DeleteUsedCoupons.jsx
+    │   ├── Index.jsx
+    │   ├── Update.jsx
+    │   └── UsedCoupons.jsx
+    ├── Dashboard
+    │   ├── AppointmentCards.jsx
+    │   ├── AppointmentChart.jsx
+    │   ├── AppointmentReg.jsx
+    │   ├── AppointmentStatusPieChart.jsx
+    │   ├── Calender.jsx
+    │   ├── CancelationReqChart.jsx
+    │   ├── CancellationReqStatsics.jsx
+    │   ├── Dashboard.jsx
+    │   ├── PatientsReg.jsx
+    │   ├── TransactionChart.jsx
+    │   ├── TransactionPieChart.jsx
+    │   ├── UsersReg.jsx
+    │   └── WelcomeCard.jsx
+    ├── Department
+    │   ├── Add.jsx
+    │   ├── Delete.jsx
+    │   ├── Index.jsx
+    │   └── Update.jsx
+    ├── Doctors
+    │   ├── Add.jsx
+    │   ├── Delete.jsx
+    │   ├── DoctAppoinrtments.jsx
+    │   ├── Index.jsx
+    │   ├── Review.jsx
+    │   └── Update.jsx
+    ├── Family-Members
+    │   ├── Add.jsx
+    │   ├── Delete.jsx
+    │   ├── Edit.jsx
+    │   ├── FamilyMembersByUser.jsx
+    │   └── Index.jsx
+    ├── Files
+    │   ├── AddFile.jsx
+    │   └── Files.jsx
+    ├── Invoices
+    │   ├── InvoiceByAppointmentID.jsx
+    │   └── Invoices.jsx
+    ├── Login.jsx
+    ├── Medicines
+    │   ├── AddMedicine.jsx
+    │   ├── DeleteMedicine.jsx
+    │   ├── Index.jsx
+    │   └── UpdateMedicine.jsx
+    ├── Notification
+    │   ├── AddUserNotifcation.jsx
+    │   ├── AdminNotifcation.jsx
+    │   ├── DoctorNotification.jsx
+    │   ├── getfile.js
+    │   ├── getPrescription.js
+    │   ├── index.jsx
+    │   └── UserNotification.jsx
+    ├── Patients
+    │   ├── AddPatientFiles.jsx
+    │   ├── AddPatients.jsx
+    │   ├── DeletePatientFile.jsx
+    │   ├── index.jsx
+    │   ├── PatientAppointments.jsx
+    │   ├── PatientFiles.jsx
+    │   ├── Update.jsx
+    │   └── UpdatePatientFiles.jsx
+    ├── Payments
+    │   ├── PaymentsByAppID.jsx
+    │   └── Payments.jsx
+    ├── Prescriptions
+    │   ├── AddPrescription.jsx
+    │   ├── AllPrescription.jsx
+    │   ├── DeletePrescription.jsx
+    │   ├── PrescriptionByPatientID.jsx
+    │   ├── Prescription.jsx
+    │   └── UpdatePrescription.jsx
+    ├── Reviews
+    │   └── index.jsx
+    ├── Roles
+    │   ├── Add.jsx
+    │   ├── AssignedUsers.jsx
+    │   ├── AssignRole.jsx
+    │   ├── Delete.jsx
+    │   ├── Index.jsx
+    │   ├── Role.jsx
+    │   ├── RolePermissons.jsx
+    │   └── Update.jsx
+    ├── Settings
+    │   ├── Configs
+    │   ├── Fees.jsx
+    │   ├── LoginScreen
+    │   ├── PaymentGetways
+    │   ├── SettingPage.jsx
+    │   ├── Settings.jsx
+    │   ├── Social Media
+    │   ├── Testimonials
+    │   ├── WebPages.jsx
+    │   └── Wsywig.jsx
+    ├── Spacialization
+    │   ├── Add.jsx
+    │   ├── Delete.jsx
+    │   ├── Index.jsx
+    │   └── Update.jsx
+    ├── States
+    │   ├── Add.jsx
+    │   ├── Delete.jsx
+    │   ├── Index.jsx
+    │   └── Update.jsx
+    ├── Transaction
+    │   ├── Add.jsx
+    │   ├── Delete.jsx
+    │   ├── Index.jsx
+    │   ├── TransactionByAppID.jsx
+    │   └── Update.jsx
+    ├── Users
+    │   ├── AddUser.jsx
+    │   ├── Index.jsx
+    │   ├── UpdateUser.jsx
+    │   └── VitalsData.jsx
+    └── Wallet
+        ├── AddMoney.jsx
+        └── Wallet.jsx
+
+41 directories, 200 files
