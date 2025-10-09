@@ -6,7 +6,7 @@ import admin from "../../Controllers/admin";
 import { ADD } from "../../Controllers/ApiControllers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ShowToast from "../../Controllers/ShowToast";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 
 const handleUpdate = async (data) => {
   const res = await ADD(admin.token, "update_web_page", data);

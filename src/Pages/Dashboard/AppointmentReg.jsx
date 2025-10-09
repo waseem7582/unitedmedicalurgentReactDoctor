@@ -9,12 +9,12 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import getStatusBadge from "../../Hooks/StatusBadge";
 import { HiDownload } from "react-icons/hi";
 import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import DateRangeCalender from "../../components/DateRangeCalender";
 import { daysBack } from "../../Controllers/dateConfig";
 
 const filterRecentData = (data, lastDays) => {

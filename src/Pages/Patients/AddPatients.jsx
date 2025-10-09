@@ -20,7 +20,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import ISDCODEMODAL from "../../Components/IsdModal";
+import ISDCODEMODAL from "../../components/IsdModal";
 import { useState } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import moment from "moment";

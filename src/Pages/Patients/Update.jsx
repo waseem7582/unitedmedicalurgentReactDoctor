@@ -34,8 +34,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { ADD, GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
-import ISDCODEMODAL from "../../Components/IsdModal";
-import Loading from "../../Components/Loading";
+import ISDCODEMODAL from "../../components/IsdModal";
+import Loading from "../../components/Loading";
 import showToast from "../../Controllers/ShowToast";
 import imageBaseURL from "../../Controllers/image";
 import ShowToast from "../../Controllers/ShowToast";
@@ -45,7 +45,7 @@ import { FaTrash } from "react-icons/fa";
 import AppointmentsByPatientID from "../Appointments/AppointmentsByPatientID";
 import PrescriptionByPatientID from "../Prescriptions/PrescriptionByPatientID";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 
 export default function UpdatePatient() {
   const { id } = useParams();

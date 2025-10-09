@@ -28,7 +28,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UPDATE } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import ShowToast from "../../Controllers/ShowToast";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 
 const paymentModes = [
   {

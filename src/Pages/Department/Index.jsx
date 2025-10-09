@@ -16,7 +16,7 @@ import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET, UPDATE } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import AddDepartmentModel from "./Add";
@@ -24,7 +24,7 @@ import DeleteDepartment from "./Delete";
 import UpdateDepartmentModel from "./Update";
 import useSearchFilter from "../../Hooks/UseSearchFilter";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import ShowToast from "../../Controllers/ShowToast";
 
 export default function Department() {

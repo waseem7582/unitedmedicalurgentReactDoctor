@@ -11,15 +11,15 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { useNavigate } from "react-router-dom";
 
 import useHasPermission from "../../Hooks/HasPermission";
 import { useEffect, useRef, useState } from "react";
 import useDebounce from "../../Hooks/useDebounce";
-import NotAuth from "../../Components/NotAuth";
-import DateRangeCalender from "../../Components/DateRangeCalender";
-import Pagination from "../../Components/Pagination";
+import NotAuth from "../../components/NotAuth";
+import DateRangeCalender from "../../components/DateRangeCalender";
+import Pagination from "../../components/Pagination";
 import moment from "moment";
 
 const getPageIndices = (currentPage, itemsPerPage) => {

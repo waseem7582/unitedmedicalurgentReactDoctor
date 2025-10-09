@@ -28,7 +28,7 @@ import AddPatients from "../Patients/AddPatients";
 import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
-import ClockWithCountdown from "../../Components/LiveClock";
+import ClockWithCountdown from "../../components/LiveClock";
 import useHasPermission from "../../Hooks/HasPermission";
 import CancellationReqStatsics from "./CancellationReqStatsics";
 import CancellationPieChart from "./CancelationReqChart";

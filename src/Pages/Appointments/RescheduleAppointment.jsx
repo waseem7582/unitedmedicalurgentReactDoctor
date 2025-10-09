@@ -17,7 +17,7 @@ import {
 import moment from "moment";
 import { GET, UPDATE } from "../../Controllers/ApiControllers";
 import { useState } from "react";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import "swiper/swiper-bundle.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

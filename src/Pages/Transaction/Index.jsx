@@ -16,18 +16,18 @@ import {
 } from "@chakra-ui/react";
 import { FiEdit } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import Invoices from "../Invoices/Invoices";
 import AppointmentPayments from "../Payments/Payments";
-import Pagination from "../../Components/Pagination";
+import Pagination from "../../components/Pagination";
 import useDebounce from "../../Hooks/useDebounce";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import NotAuth from "../../components/NotAuth";
+import DateRangeCalender from "../../components/DateRangeCalender";
 
 const txnBadge = (txn) => {
   switch (txn) {

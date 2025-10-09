@@ -23,7 +23,7 @@ import { ADD, GET, UPDATE } from "../../Controllers/ApiControllers";
 import ShowToast from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
 import RolePermissions from "./RolePermissons";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 const permissonsIDs = (data) => {
   if (!data?.length) return [];
   const IDs = data?.map((item) => item.permission_id);

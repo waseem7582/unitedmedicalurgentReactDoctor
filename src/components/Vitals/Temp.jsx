@@ -48,7 +48,7 @@ import {
 import { useTheme } from "@emotion/react";
 import moment from "moment";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import { ADD, GET } from "../../Controllers/ApiControllers";
 import { useForm } from "react-hook-form";
 import showToast from "../../Controllers/ShowToast";
@@ -63,6 +63,7 @@ const addData = async (data) => {
   }
   return res;
 };
+
 const handleDelete = async (data) => {
   const res = await ADD(admin.token, "delete_vitals", data);
   if (res.response !== 200) {
@@ -70,6 +71,7 @@ const handleDelete = async (data) => {
   }
   return res;
 };
+
 const handleUpdate = async (data) => {
   const res = await ADD(admin.token, "update_vitals", data);
   if (res.response !== 200) {
@@ -77,51 +79,46 @@ const handleUpdate = async (data) => {
   }
   return res;
 };
-
-function BloodSugar({ id, startDate, endDate, userID }) {
-  const [selectedData, setselectedData] = useState();
+function Temperature({ id, startDate, endDate, userID }) {
+  const [selectedData, setSelectedData] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: deleteisOpen,
-    onOpen: deleteonOpen,
-    onClose: deleteonClose,
+    isOpen: deleteIsOpen,
+    onOpen: deleteOnOpen,
+    onClose: deleteOnClose,
   } = useDisclosure();
   const {
-    isOpen: editisOpen,
-    onOpen: editonOpen,
-    onClose: editonClose,
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
   } = useDisclosure();
   const theme = useTheme();
+
   const getData = async () => {
     const res = await GET(
       admin.token,
-      `get_vitals_family_member_id_type?family_member_id=${id}&type=Sugar&start_date=${startDate}&end_date=${endDate}`
+      `get_vitals_family_member_id_type?family_member_id=${id}&type=Temperature&start_date=${startDate}&end_date=${endDate}`
     );
     return res.data;
   };
+
   const { data, isLoading } = useQuery({
-    queryKey: ["vitals-sugar", id, startDate, endDate],
+    queryKey: ["vitals-temperature", id, startDate, endDate],
     queryFn: getData,
     enabled: !!id,
   });
 
-  const chartData = data?.map((item) => ({
-    dateTime: `${item.date} ${item.time}`,
-    random: item.sugar_random,
-    fasting: item.sugar_fasting,
-  }));
-  3;
+  const chartData = data
+    ?.map((item) => ({
+      dateTime: `${item.date} ${item.time}`,
+      temperature: item.temperature,
+    }))
+    .reverse();
 
-  const systolicGradientId = "colorRandom";
-  const diastolicGradientId = "colorFasting";
-
-  const strokecolorRandom = useColorModeValue(
+  const temperatureGradientId = "temperatureGradient";
+  const strokeColorTemperature = useColorModeValue(
     theme.colors.blue[500],
     theme.colors.blue[200]
-  );
-  const strokecolorFasting = useColorModeValue(
-    theme.colors.red[500],
-    theme.colors.red[200]
   );
 
   if (isLoading) return <Loading />;
@@ -135,7 +132,7 @@ function BloodSugar({ id, startDate, endDate, userID }) {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient
-                    id={systolicGradientId}
+                    id={temperatureGradientId}
                     x1="0"
                     y1="0"
                     x2="0"
@@ -143,30 +140,12 @@ function BloodSugar({ id, startDate, endDate, userID }) {
                   >
                     <stop
                       offset="5%"
-                      stopColor={strokecolorRandom}
+                      stopColor={strokeColorTemperature}
                       stopOpacity={0.4}
                     />
                     <stop
                       offset="110%"
-                      stopColor={strokecolorRandom}
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                  <linearGradient
-                    id={diastolicGradientId}
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop
-                      offset="5%"
-                      stopColor={strokecolorFasting}
-                      stopOpacity={0.4}
-                    />
-                    <stop
-                      offset="100%"
-                      stopColor={strokecolorFasting}
+                      stopColor={strokeColorTemperature}
                       stopOpacity={0.1}
                     />
                   </linearGradient>
@@ -175,51 +154,30 @@ function BloodSugar({ id, startDate, endDate, userID }) {
                 <XAxis
                   dataKey="dateTime"
                   tick={false} // Hide X-axis ticks
-                  axisLine={true} // Hide X-axis line
+                  axisLine={true}
                 />
                 <YAxis
-                  tick={true} // Hide Y-axis ticks
-                  axisLine={true} // Hide Y-axis line
+                  tick={true} // Show Y-axis ticks
+                  axisLine={true} // Show Y-axis line
                   fontSize={10}
                 />
                 <Tooltip />
                 <Area
                   cursor={"pointer"}
                   type="monotone"
-                  dataKey="random"
-                  stroke={strokecolorRandom}
+                  dataKey="temperature"
+                  stroke={strokeColorTemperature}
                   strokeWidth={2}
                   fillOpacity={1}
-                  fill={`url(#${systolicGradientId})`}
-                  name="Random Sugar"
-                  // Hide legend label
+                  fill={`url(#${temperatureGradientId})`}
+                  name="Temperature"
                   activeDot={{
-                    stroke: strokecolorRandom,
+                    stroke: strokeColorTemperature,
                     strokeWidth: 3,
                     r: 1,
                   }}
-                  dot={{ stroke: strokecolorRandom, strokeWidth: 2, r: 1 }} // Show points
+                  dot={{ stroke: strokeColorTemperature, strokeWidth: 2, r: 1 }} // Show points
                   connectNulls={true}
-                  baseValue="dataMin"
-                />
-                <Area
-                  cursor={"pointer"}
-                  type="monotone"
-                  dataKey="fasting"
-                  stroke={strokecolorFasting}
-                  fillOpacity={1}
-                  strokeWidth={2}
-                  fill={`url(#${diastolicGradientId})`}
-                  name="Fasting Sugar"
-                  legendType="none" // Hide legend label
-                  dot={{ stroke: strokecolorFasting, strokeWidth: 2, r: 1 }} // Show points
-                  activeDot={{
-                    stroke: strokecolorFasting,
-                    strokeWidth: 3,
-                    r: 1,
-                  }}
-                  connectNulls={true}
-                  baseValue="dataMin"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -229,7 +187,7 @@ function BloodSugar({ id, startDate, endDate, userID }) {
         <Box p={1} mt={2}>
           <Flex justify={"space-between"} alignItems={"center"}>
             <Text fontSize={["sm", "sm"]} fontWeight="bold">
-              Blood Sugar History -
+              Temperature History -
             </Text>
             <Button
               size={"sm"}
@@ -251,10 +209,7 @@ function BloodSugar({ id, startDate, endDate, userID }) {
                 <Thead>
                   <Tr bg={"blue.500"}>
                     <Th px={1} py={2} color={"#fff"}>
-                      Fasting (Mg/dl)
-                    </Th>
-                    <Th px={1} py={2} color={"#fff"}>
-                      Random (Mg/dl)
+                      Temp (°C)
                     </Th>
                     <Th px={1} py={2} color={"#fff"}>
                       Date
@@ -271,17 +226,9 @@ function BloodSugar({ id, startDate, endDate, userID }) {
                   {data?.map((record) => (
                     <Tr key={record.id} fontSize={14}>
                       <Td px={1} py={2}>
-                        {record.sugar_fasting
-                          ? record.sugar_fasting + " " + "(Mg/dl)"
-                          : "N/A"}
+                        {record?.temperature} °C
                       </Td>
                       <Td px={1} py={2}>
-                        {record.sugar_random
-                          ? record.sugar_random + " " + "(Mg/dl)"
-                          : "N/A"}
-                      </Td>
-                      <Td px={1} py={2}>
-                        {" "}
                         {record.date}
                       </Td>
                       <Td px={1} py={2}>
@@ -295,8 +242,8 @@ function BloodSugar({ id, startDate, endDate, userID }) {
                             variant={"ghost"}
                             icon={<AiFillEdit fontSize={18} />}
                             onClick={() => {
-                              setselectedData(record);
-                              editonOpen();
+                              setSelectedData(record);
+                              editOnOpen();
                             }}
                           />
                           <IconButton
@@ -305,8 +252,8 @@ function BloodSugar({ id, startDate, endDate, userID }) {
                             variant={"ghost"}
                             icon={<BiTrash fontSize={18} />}
                             onClick={() => {
-                              setselectedData(record);
-                              deleteonOpen();
+                              setSelectedData(record);
+                              deleteOnOpen();
                             }}
                           />
                         </Flex>
@@ -324,23 +271,26 @@ function BloodSugar({ id, startDate, endDate, userID }) {
           isOpen={isOpen}
           onClose={onClose}
           selectedMember={id}
+          type="Temperature"
           userID={userID}
         />
       ) : null}
-      {deleteisOpen ? (
+      {deleteIsOpen ? (
         <DeleteData
-          isOpen={deleteisOpen}
-          onClose={deleteonClose}
+          isOpen={deleteIsOpen}
+          onClose={deleteOnClose}
           selectedMember={id}
           data={selectedData}
+          userID={userID}
         />
       ) : null}
-      {editisOpen ? (
+      {editIsOpen ? (
         <Edit
-          isOpen={editisOpen}
-          onClose={editonClose}
+          isOpen={editIsOpen}
+          onClose={editOnClose}
           selectedMember={id}
           data={selectedData}
+          type="Temperature"
           userID={userID}
         />
       ) : null}
@@ -348,7 +298,7 @@ function BloodSugar({ id, startDate, endDate, userID }) {
   );
 }
 
-export default BloodSugar;
+export default Temperature;
 
 const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
   const now = new Date();
@@ -376,7 +326,7 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
       ...data,
       user_id: userID,
       family_member_id: selectedMember,
-      type: "Sugar",
+      type: "Temperature",
     };
     mutation.mutate(formData);
     // Reset the form after submission
@@ -396,7 +346,7 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
           bg={"main.400"}
           color={"#fff"}
         >
-          Add Blood Sugar Data
+          Add Temperature Data
         </ModalHeader>
 
         <Divider />
@@ -423,20 +373,11 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
           </Flex>
 
           <FormControl mb={4}>
-            <FormLabel mb={1}>Fasting</FormLabel>
+            <FormLabel mb={1}>Temperature (°C)</FormLabel>
             <Input
               type="number"
-              placeholder="Enter Fasting Blood sugar"
-              {...register("sugar_fasting", { required: true })}
-            />
-          </FormControl>
-
-          <FormControl mb={4}>
-            <FormLabel mb={1}>Random</FormLabel>
-            <Input
-              type="number"
-              placeholder="Enter Random Blood sugar"
-              {...register("sugar_random", { required: true })}
+              placeholder="Enter Temperature (°C)"
+              {...register("temperature", { required: true })}
             />
           </FormControl>
         </ModalBody>
@@ -506,7 +447,7 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
           bg={"main.400"}
           color={"#fff"}
         >
-          Update Blood Sugar Data
+          Update Temperature Data
         </ModalHeader>
 
         <Divider />
@@ -515,40 +456,37 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
             <FormControl mb={4}>
               <FormLabel mb={1}>Date</FormLabel>
               <Input
-                max={todayDate()}
+                isDisabled
                 type="date"
                 defaultValue={data.date}
                 {...register("date", { required: true })}
+                _disabled={{
+                  color: "#000",
+                }}
               />
             </FormControl>
             <FormControl mb={4}>
               <FormLabel mb={1}>Time</FormLabel>
               <Input
+                isDisabled
                 type="time"
                 defaultValue={data.time}
                 textAlign={"left"}
                 {...register("time", { required: true })}
+                _disabled={{
+                  color: "#000",
+                }}
               />
             </FormControl>
           </Flex>
 
           <FormControl mb={4}>
-            <FormLabel mb={1}>Fasting (Mg/dl)</FormLabel>
+            <FormLabel mb={1}>Temperature (°C)</FormLabel>
             <Input
-              defaultValue={data.sugar_fasting}
+              defaultValue={data.temperature}
               type="number"
-              placeholder="Enter Fasting Blood sugar"
-              {...register("sugar_fasting", { required: true })}
-            />
-          </FormControl>
-
-          <FormControl mb={4}>
-            <FormLabel mb={1}>Random (Mg/dl)</FormLabel>
-            <Input
-              defaultValue={data.sugar_random}
-              type="number"
-              placeholder="Enter Random Blood sugar"
-              {...register("sugar_random", { required: true })}
+              placeholder="Enter Temperature (°C)"
+              {...register("temperature", { required: true })}
             />
           </FormControl>
         </ModalBody>
@@ -601,7 +539,7 @@ const DeleteData = ({ onClose, isOpen, selectedMember, data }) => {
           </AlertDialogHeader>
 
           <AlertDialogBody fontSize={"md"} fontWeight={500}>
-            Are you sure? Do you want to delete Blood Sugar data for date -{" "}
+            Are you sure? Do you want to delete Temperature data for date -{" "}
             {data?.date}
           </AlertDialogBody>
 

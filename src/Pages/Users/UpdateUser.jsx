@@ -41,8 +41,8 @@ import {
 } from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
 import imageBaseURL from "../../Controllers/image";
-import Loading from "../../Components/Loading";
-import ISDCODEMODAL from "../../Components/IsdModal";
+import Loading from "../../components/Loading";
+import ISDCODEMODAL from "../../components/IsdModal";
 import { FaTrash } from "react-icons/fa";
 import VitalsData from "./VitalsData";
 import FamilyMembersByUser from "../Family-Members/FamilyMembersByUser";
@@ -50,7 +50,7 @@ import todayDate from "../../Controllers/today";
 import Wallet from "../Wallet/Wallet";
 import { walletMinAmount } from "../../Controllers/Wallet";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 
 export default function UpdateUser() {
   const { id } = useParams();

@@ -15,14 +15,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import AddPatients from "./AddPatients";
 import useDebounce from "../../Hooks/useDebounce";
-import Pagination from "../../Components/Pagination";
+import Pagination from "../../components/Pagination";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 
 const ITEMS_PER_PAGE = 50;
 

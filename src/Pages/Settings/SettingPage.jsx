@@ -2,7 +2,7 @@
 import { Box, Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
 import { GET } from "../../Controllers/ApiControllers";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import admin from "../../Controllers/admin";
 import SettingConfigurations from "./Configs/SettingConfigurations";
 import t from "../../Controllers/configs";

@@ -30,7 +30,7 @@ import {
 import useDoctorData from "../../Hooks/UseDoctorData";
 import usePatientData from "../../Hooks/UsePatientsData";
 import { useState } from "react";
-import UsersCombobox from "../../Components/UsersComboBox";
+import UsersCombobox from "../../components/UsersComboBox";
 import moment from "moment";
 import { ChevronDownIcon } from "lucide-react";
 import getStatusBadge from "../../Hooks/StatusBadge";

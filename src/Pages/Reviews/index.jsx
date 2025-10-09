@@ -11,12 +11,12 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useRef } from "react";
 import moment from "moment";
-import DynamicTable from "../../Components/DataTable";
-import Pagination from "../../Components/Pagination";
+import DynamicTable from "../../components/DataTable";
+import Pagination from "../../components/Pagination";
 import useDebounce from "../../Hooks/useDebounce";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import DateRangeCalender from "../../components/DateRangeCalender";
 import { GET } from "../../Controllers/ApiControllers";
-import ErrorPage from "../../Components/ErrorPage";
+import ErrorPage from "../../components/ErrorPage";
 import { RefreshCwIcon } from "lucide-react";
 import admin from "../../Controllers/admin";
 

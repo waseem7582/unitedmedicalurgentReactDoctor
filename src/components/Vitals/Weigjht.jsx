@@ -48,7 +48,7 @@ import {
 import { useTheme } from "@emotion/react";
 import moment from "moment";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import { ADD, GET } from "../../Controllers/ApiControllers";
 import { useForm } from "react-hook-form";
 import showToast from "../../Controllers/ShowToast";
@@ -63,7 +63,6 @@ const addData = async (data) => {
   }
   return res;
 };
-
 const handleDelete = async (data) => {
   const res = await ADD(admin.token, "delete_vitals", data);
   if (res.response !== 200) {
@@ -71,6 +70,7 @@ const handleDelete = async (data) => {
   }
   return res;
 };
+
 const handleUpdate = async (data) => {
   const res = await ADD(admin.token, "update_vitals", data);
   if (res.response !== 200) {
@@ -79,32 +79,30 @@ const handleUpdate = async (data) => {
   return res;
 };
 
-function SpO2({ id, startDate, endDate, userID }) {
-  const [selectedData, setSelectedData] = useState();
+function Weight({ id, startDate, endDate, userID }) {
+  const [selectedData, setselectedData] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: deleteIsOpen,
-    onOpen: deleteOnOpen,
-    onClose: deleteOnClose,
+    isOpen: deleteisOpen,
+    onOpen: deleteonOpen,
+    onClose: deleteonClose,
   } = useDisclosure();
   const {
-    isOpen: editIsOpen,
-    onOpen: editOnOpen,
-    onClose: editOnClose,
+    isOpen: editisOpen,
+    onOpen: editonOpen,
+    onClose: editonClose,
   } = useDisclosure();
   const theme = useTheme();
-
   const getData = async () => {
     const res = await GET(
       admin.token,
-      `get_vitals_family_member_id_type?family_member_id=${id}&type=SpO2&start_date=${startDate}&end_date=${endDate}`
+      `get_vitals_family_member_id_type?family_member_id=${id}&type=Weight&start_date=${startDate}&end_date=${endDate}`
     );
 
     return res.data;
   };
-
   const { data, isLoading } = useQuery({
-    queryKey: ["vitals-spo2", id, startDate, endDate],
+    queryKey: ["vitals-weight", id, startDate, endDate],
     queryFn: getData,
     enabled: !!id,
   });
@@ -112,14 +110,20 @@ function SpO2({ id, startDate, endDate, userID }) {
   const chartData = data
     ?.map((item) => ({
       dateTime: `${item.date} ${item.time}`,
-      spo2: item.spo2,
+      weight: item.weight,
     }))
     .reverse();
 
-  const spo2GradientId = "spo2Gradient";
-  const strokeColorSpO2 = useColorModeValue(
+  const systolicGradientId = "colorRandom";
+  const diastolicGradientId = "colorFasting";
+
+  const strokecolorRandom = useColorModeValue(
     theme.colors.blue[500],
     theme.colors.blue[200]
+  );
+  const strokecolorFasting = useColorModeValue(
+    theme.colors.red[500],
+    theme.colors.red[200]
   );
 
   if (isLoading) return <Loading />;
@@ -133,7 +137,7 @@ function SpO2({ id, startDate, endDate, userID }) {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient
-                    id={spo2GradientId}
+                    id={systolicGradientId}
                     x1="0"
                     y1="0"
                     x2="0"
@@ -141,12 +145,30 @@ function SpO2({ id, startDate, endDate, userID }) {
                   >
                     <stop
                       offset="5%"
-                      stopColor={strokeColorSpO2}
+                      stopColor={strokecolorRandom}
                       stopOpacity={0.4}
                     />
                     <stop
                       offset="110%"
-                      stopColor={strokeColorSpO2}
+                      stopColor={strokecolorRandom}
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                  <linearGradient
+                    id={diastolicGradientId}
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor={strokecolorFasting}
+                      stopOpacity={0.4}
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor={strokecolorFasting}
                       stopOpacity={0.1}
                     />
                   </linearGradient>
@@ -158,26 +180,27 @@ function SpO2({ id, startDate, endDate, userID }) {
                   axisLine={true} // Hide X-axis line
                 />
                 <YAxis
-                  tick={true} // Show Y-axis ticks
-                  axisLine={true} // Show Y-axis line
+                  tick={true} // Hide Y-axis ticks
+                  axisLine={true} // Hide Y-axis line
                   fontSize={10}
                 />
                 <Tooltip />
                 <Area
                   cursor={"pointer"}
                   type="monotone"
-                  dataKey="spo2"
-                  stroke={strokeColorSpO2}
+                  dataKey="weight"
+                  stroke={strokecolorRandom}
                   strokeWidth={2}
                   fillOpacity={1}
-                  fill={`url(#${spo2GradientId})`}
-                  name="SpO2"
+                  fill={`url(#${systolicGradientId})`}
+                  name="Random Sugar"
+                  // Hide legend label
                   activeDot={{
-                    stroke: strokeColorSpO2,
+                    stroke: strokecolorRandom,
                     strokeWidth: 3,
                     r: 1,
                   }}
-                  dot={{ stroke: strokeColorSpO2, strokeWidth: 2, r: 1 }} // Show points
+                  dot={{ stroke: strokecolorRandom, strokeWidth: 2, r: 1 }} // Show points
                   connectNulls={true}
                 />
               </AreaChart>
@@ -188,7 +211,7 @@ function SpO2({ id, startDate, endDate, userID }) {
         <Box p={1} mt={2}>
           <Flex justify={"space-between"} alignItems={"center"}>
             <Text fontSize={["sm", "sm"]} fontWeight="bold">
-              SpO2 History -
+              Weight History -
             </Text>
             <Button
               size={"sm"}
@@ -210,7 +233,7 @@ function SpO2({ id, startDate, endDate, userID }) {
                 <Thead>
                   <Tr bg={"blue.500"}>
                     <Th px={1} py={2} color={"#fff"}>
-                      SpO2 (%)
+                      Weight (KG)
                     </Th>
                     <Th px={1} py={2} color={"#fff"}>
                       Date
@@ -227,9 +250,10 @@ function SpO2({ id, startDate, endDate, userID }) {
                   {data?.map((record) => (
                     <Tr key={record.id} fontSize={14}>
                       <Td px={1} py={2}>
-                        {record?.spo2 || 0} (%)
+                        {record?.weight || 0} (KG)
                       </Td>
                       <Td px={1} py={2}>
+                        {" "}
                         {record.date}
                       </Td>
                       <Td px={1} py={2}>
@@ -243,8 +267,8 @@ function SpO2({ id, startDate, endDate, userID }) {
                             variant={"ghost"}
                             icon={<AiFillEdit fontSize={18} />}
                             onClick={() => {
-                              setSelectedData(record);
-                              editOnOpen();
+                              setselectedData(record);
+                              editonOpen();
                             }}
                           />
                           <IconButton
@@ -253,8 +277,8 @@ function SpO2({ id, startDate, endDate, userID }) {
                             variant={"ghost"}
                             icon={<BiTrash fontSize={18} />}
                             onClick={() => {
-                              setSelectedData(record);
-                              deleteOnOpen();
+                              setselectedData(record);
+                              deleteonOpen();
                             }}
                           />
                         </Flex>
@@ -275,21 +299,20 @@ function SpO2({ id, startDate, endDate, userID }) {
           userID={userID}
         />
       ) : null}
-      {deleteIsOpen ? (
+      {deleteisOpen ? (
         <DeleteData
-          isOpen={deleteIsOpen}
-          onClose={deleteOnClose}
+          isOpen={deleteisOpen}
+          onClose={deleteonClose}
           selectedMember={id}
           data={selectedData}
         />
       ) : null}
-      {editIsOpen ? (
+      {editisOpen ? (
         <Edit
-          isOpen={editIsOpen}
-          onClose={editOnClose}
+          isOpen={editisOpen}
+          onClose={editonClose}
           selectedMember={id}
           data={selectedData}
-          type="SpO2"
           userID={userID}
         />
       ) : null}
@@ -297,7 +320,7 @@ function SpO2({ id, startDate, endDate, userID }) {
   );
 }
 
-export default SpO2;
+export default Weight;
 
 const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
   const now = new Date();
@@ -325,7 +348,7 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
       ...data,
       user_id: userID,
       family_member_id: selectedMember,
-      type: "SpO2",
+      type: "Weight",
     };
     mutation.mutate(formData);
     // Reset the form after submission
@@ -345,7 +368,7 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
           bg={"main.400"}
           color={"#fff"}
         >
-          Add SpO2 Data
+          Add Weight Data
         </ModalHeader>
 
         <Divider />
@@ -372,11 +395,11 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
           </Flex>
 
           <FormControl mb={4}>
-            <FormLabel mb={1}>SpO2 (%)</FormLabel>
+            <FormLabel mb={1}>Weight (KG)</FormLabel>
             <Input
               type="number"
-              placeholder="Enter SpO2 (%)"
-              {...register("spo2", { required: true })}
+              placeholder="Enter Weight (KG)"
+              {...register("weight", { required: true })}
             />
           </FormControl>
         </ModalBody>
@@ -421,7 +444,6 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
   });
 
   const onSubmit = (dataForm) => {
-    alert(6);
     let formData = {
       ...dataForm,
       user_id: userID,
@@ -430,6 +452,7 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
       id: data.id,
     };
     mutation.mutate(formData);
+    // Reset the form after submission
   };
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -446,7 +469,7 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
           bg={"main.400"}
           color={"#fff"}
         >
-          Update SpO2 Data
+          Update Weight Data
         </ModalHeader>
 
         <Divider />
@@ -480,12 +503,12 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
           </Flex>
 
           <FormControl mb={4}>
-            <FormLabel mb={1}>SpO2 (%)</FormLabel>
+            <FormLabel mb={1}>Weight (KG)</FormLabel>
             <Input
-              defaultValue={data.spo2}
+              defaultValue={data.weight}
               type="number"
-              placeholder="Enter spo2 (%)"
-              {...register("spo2", { required: true })}
+              placeholder="Enter Weight (KG)"
+              {...register("weight", { required: true })}
             />
           </FormControl>
         </ModalBody>
@@ -538,7 +561,7 @@ const DeleteData = ({ onClose, isOpen, selectedMember, data }) => {
           </AlertDialogHeader>
 
           <AlertDialogBody fontSize={"md"} fontWeight={500}>
-            Are you sure? Do you want to delete SpO2 data for date -{" "}
+            Are you sure? Do you want to delete Weight data for date -{" "}
             {data?.date}
           </AlertDialogBody>
 

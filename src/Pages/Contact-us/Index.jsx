@@ -12,14 +12,14 @@ import {
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import DeleteDepartment from "./Delete";
 import UpdateDepartmentModel from "./Update";
 import useSearchFilter from "../../Hooks/UseSearchFilter";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 
 export default function ContactUS() {
   const [SelectedData, setSelectedData] = useState();

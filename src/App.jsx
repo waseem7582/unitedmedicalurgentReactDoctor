@@ -6,7 +6,7 @@ import { UPDATE } from "./Controllers/ApiControllers";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import admin from "./Controllers/admin";
 import "/src/App.css";
-import Loading from "./Components/Loading";
+import Loading from "./components/Loading";
 import ErrorBoundary from "./ErrorBoundary";
 import moment from "moment";
 const Dashboard = React.lazy(() => import("./Global/Dashboard"));

@@ -27,7 +27,7 @@ import { ADD } from "../../Controllers/ApiControllers";
 import ShowToast from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
 import usePatientData from "../../Hooks/UsePatientsData";
-import UsersCombobox from "../../Components/UsersComboBox";
+import UsersCombobox from "../../components/UsersComboBox";
 
 export default function AddPatientsFiles({ isOpen, onClose }) {
   const [isLoading, setisLoading] = useState();

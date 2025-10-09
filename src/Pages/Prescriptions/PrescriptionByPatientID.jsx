@@ -28,7 +28,7 @@ import useSearchFilter from "../../Hooks/UseSearchFilter";
 import { Link as RouterLink } from "react-router-dom";
 import api from "../../Controllers/api";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import { useState } from "react";
 import DeletePrescription from "./DeletePrescription";
 import imageBaseURL from "../../Controllers/image";

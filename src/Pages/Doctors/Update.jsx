@@ -42,26 +42,26 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { ComboboxDemo } from "../../Components/ComboBox";
-import { MultiTagInput } from "../../Components/MultiTaginput";
+import { ComboboxDemo } from "../../components/ComboBox";
+import { MultiTagInput } from "../../components/MultiTaginput";
 import { ADD, GET, UPDATE } from "../../Controllers/ApiControllers";
 import {
   default as ShowToast,
   default as showToast,
 } from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
-import TimeSlotes from "../../Components/DoctorTimeSlotes/TimeSlotes";
-import Loading from "../../Components/Loading";
+import TimeSlotes from "../../components/DoctorTimeSlotes/TimeSlotes";
+import Loading from "../../components/Loading";
 import RatingStars from "../../Hooks/ShowRating";
-import ISDCODEMODAL from "../../Components/IsdModal";
+import ISDCODEMODAL from "../../components/IsdModal";
 import { FaChevronDown, FaTrash } from "react-icons/fa";
 import imageBaseURL from "../../Controllers/image";
 import useHasPermission from "../../Hooks/HasPermission";
-import VideoTimeSlotes from "../../Components/VideoTimeSlotes/TimeSlotes";
+import VideoTimeSlotes from "../../components/VideoTimeSlotes/TimeSlotes";
 import todayDate from "../../Controllers/today";
 import Review from "./Review";
 import DoctAppointments from "./DoctAppoinrtments";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 
 const getSpclizeList = async () => {
   const res = await GET(admin.token, "get_specialization");

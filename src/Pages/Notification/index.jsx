@@ -4,7 +4,7 @@ import { useState } from "react";
 import UserNotification from "./UserNotification";
 import DoctorNotification from "./DoctorNotification";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import admin from "../../Controllers/admin";
 import AdminNotification from "./AdminNotifcation";
 

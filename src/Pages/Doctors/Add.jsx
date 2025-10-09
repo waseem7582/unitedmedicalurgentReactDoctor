@@ -26,15 +26,15 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { ComboboxDemo } from "../../Components/ComboBox";
-import { MultiTagInput } from "../../Components/MultiTaginput";
+import { ComboboxDemo } from "../../components/ComboBox";
+import { MultiTagInput } from "../../components/MultiTaginput";
 import { ADD, GET } from "../../Controllers/ApiControllers";
 import {
   default as ShowToast,
   default as showToast,
 } from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
-import ISDCODEMODAL from "../../Components/IsdModal";
+import ISDCODEMODAL from "../../components/IsdModal";
 import todayDate from "../../Controllers/today";
 
 export default function AddDoctor() {

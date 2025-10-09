@@ -19,15 +19,15 @@ import admin from "../../Controllers/admin";
 import { FaTrash } from "react-icons/fa";
 
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
-import DynamicTable from "../../Components/DataTable";
+import NotAuth from "../../components/NotAuth";
+import DynamicTable from "../../components/DataTable";
 import { FiEdit } from "react-icons/fi";
 import UpdatePatientFiles from "../Patients/UpdatePatientFiles";
 import useDebounce from "../../Hooks/useDebounce"; // Use debounce for search
-import Pagination from "../../Components/Pagination"; // Pagination component
-import DateRangeCalender from "../../Components/DateRangeCalender"; // Date range filtering component
+import Pagination from "../../components/Pagination"; // Pagination component
+import DateRangeCalender from "../../components/DateRangeCalender"; // Date range filtering component
 import imageBaseURL from "../../Controllers/image";
-import ErrorPage from "../../Components/ErrorPage";
+import ErrorPage from "../../components/ErrorPage";
 import AddPatientsFiles from "./AddFile";
 import DeletePatientFiles from "../Patients/DeletePatientFile";
 import moment from "moment"; // For date manipulation

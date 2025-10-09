@@ -19,14 +19,14 @@ import {
 import { useRef, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { DELETE, GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import AddRoleModel from "./Add";
 import DeleteRole from "./Delete";
 import useSearchFilter from "../../Hooks/UseSearchFilter";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import AssignRole from "./AssignRole";
 import ShowToast from "../../Controllers/ShowToast";
 const getRoles = async () => {

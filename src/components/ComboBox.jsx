@@ -7,7 +7,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/ommand";
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,

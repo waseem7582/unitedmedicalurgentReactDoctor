@@ -1,7 +1,7 @@
 ﻿/* eslint-disable react/prop-types */
 import { Box, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import SocialMedia from "./Social Media/SocialMedia";
 import SettingsPage from "./SettingPage";
 import PaymentGetways from "./PaymentGetways/Index";

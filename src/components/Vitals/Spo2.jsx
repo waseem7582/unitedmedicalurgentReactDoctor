@@ -48,7 +48,7 @@ import {
 import { useTheme } from "@emotion/react";
 import moment from "moment";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import { ADD, GET } from "../../Controllers/ApiControllers";
 import { useForm } from "react-hook-form";
 import showToast from "../../Controllers/ShowToast";
@@ -71,7 +71,6 @@ const handleDelete = async (data) => {
   }
   return res;
 };
-
 const handleUpdate = async (data) => {
   const res = await ADD(admin.token, "update_vitals", data);
   if (res.response !== 200) {
@@ -79,7 +78,8 @@ const handleUpdate = async (data) => {
   }
   return res;
 };
-function Temperature({ id, startDate, endDate, userID }) {
+
+function SpO2({ id, startDate, endDate, userID }) {
   const [selectedData, setSelectedData] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -97,13 +97,14 @@ function Temperature({ id, startDate, endDate, userID }) {
   const getData = async () => {
     const res = await GET(
       admin.token,
-      `get_vitals_family_member_id_type?family_member_id=${id}&type=Temperature&start_date=${startDate}&end_date=${endDate}`
+      `get_vitals_family_member_id_type?family_member_id=${id}&type=SpO2&start_date=${startDate}&end_date=${endDate}`
     );
+
     return res.data;
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["vitals-temperature", id, startDate, endDate],
+    queryKey: ["vitals-spo2", id, startDate, endDate],
     queryFn: getData,
     enabled: !!id,
   });
@@ -111,12 +112,12 @@ function Temperature({ id, startDate, endDate, userID }) {
   const chartData = data
     ?.map((item) => ({
       dateTime: `${item.date} ${item.time}`,
-      temperature: item.temperature,
+      spo2: item.spo2,
     }))
     .reverse();
 
-  const temperatureGradientId = "temperatureGradient";
-  const strokeColorTemperature = useColorModeValue(
+  const spo2GradientId = "spo2Gradient";
+  const strokeColorSpO2 = useColorModeValue(
     theme.colors.blue[500],
     theme.colors.blue[200]
   );
@@ -132,7 +133,7 @@ function Temperature({ id, startDate, endDate, userID }) {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient
-                    id={temperatureGradientId}
+                    id={spo2GradientId}
                     x1="0"
                     y1="0"
                     x2="0"
@@ -140,12 +141,12 @@ function Temperature({ id, startDate, endDate, userID }) {
                   >
                     <stop
                       offset="5%"
-                      stopColor={strokeColorTemperature}
+                      stopColor={strokeColorSpO2}
                       stopOpacity={0.4}
                     />
                     <stop
                       offset="110%"
-                      stopColor={strokeColorTemperature}
+                      stopColor={strokeColorSpO2}
                       stopOpacity={0.1}
                     />
                   </linearGradient>
@@ -154,7 +155,7 @@ function Temperature({ id, startDate, endDate, userID }) {
                 <XAxis
                   dataKey="dateTime"
                   tick={false} // Hide X-axis ticks
-                  axisLine={true}
+                  axisLine={true} // Hide X-axis line
                 />
                 <YAxis
                   tick={true} // Show Y-axis ticks
@@ -165,18 +166,18 @@ function Temperature({ id, startDate, endDate, userID }) {
                 <Area
                   cursor={"pointer"}
                   type="monotone"
-                  dataKey="temperature"
-                  stroke={strokeColorTemperature}
+                  dataKey="spo2"
+                  stroke={strokeColorSpO2}
                   strokeWidth={2}
                   fillOpacity={1}
-                  fill={`url(#${temperatureGradientId})`}
-                  name="Temperature"
+                  fill={`url(#${spo2GradientId})`}
+                  name="SpO2"
                   activeDot={{
-                    stroke: strokeColorTemperature,
+                    stroke: strokeColorSpO2,
                     strokeWidth: 3,
                     r: 1,
                   }}
-                  dot={{ stroke: strokeColorTemperature, strokeWidth: 2, r: 1 }} // Show points
+                  dot={{ stroke: strokeColorSpO2, strokeWidth: 2, r: 1 }} // Show points
                   connectNulls={true}
                 />
               </AreaChart>
@@ -187,7 +188,7 @@ function Temperature({ id, startDate, endDate, userID }) {
         <Box p={1} mt={2}>
           <Flex justify={"space-between"} alignItems={"center"}>
             <Text fontSize={["sm", "sm"]} fontWeight="bold">
-              Temperature History -
+              SpO2 History -
             </Text>
             <Button
               size={"sm"}
@@ -209,7 +210,7 @@ function Temperature({ id, startDate, endDate, userID }) {
                 <Thead>
                   <Tr bg={"blue.500"}>
                     <Th px={1} py={2} color={"#fff"}>
-                      Temp (°C)
+                      SpO2 (%)
                     </Th>
                     <Th px={1} py={2} color={"#fff"}>
                       Date
@@ -226,7 +227,7 @@ function Temperature({ id, startDate, endDate, userID }) {
                   {data?.map((record) => (
                     <Tr key={record.id} fontSize={14}>
                       <Td px={1} py={2}>
-                        {record?.temperature} °C
+                        {record?.spo2 || 0} (%)
                       </Td>
                       <Td px={1} py={2}>
                         {record.date}
@@ -271,7 +272,6 @@ function Temperature({ id, startDate, endDate, userID }) {
           isOpen={isOpen}
           onClose={onClose}
           selectedMember={id}
-          type="Temperature"
           userID={userID}
         />
       ) : null}
@@ -281,7 +281,6 @@ function Temperature({ id, startDate, endDate, userID }) {
           onClose={deleteOnClose}
           selectedMember={id}
           data={selectedData}
-          userID={userID}
         />
       ) : null}
       {editIsOpen ? (
@@ -290,7 +289,7 @@ function Temperature({ id, startDate, endDate, userID }) {
           onClose={editOnClose}
           selectedMember={id}
           data={selectedData}
-          type="Temperature"
+          type="SpO2"
           userID={userID}
         />
       ) : null}
@@ -298,7 +297,7 @@ function Temperature({ id, startDate, endDate, userID }) {
   );
 }
 
-export default Temperature;
+export default SpO2;
 
 const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
   const now = new Date();
@@ -326,7 +325,7 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
       ...data,
       user_id: userID,
       family_member_id: selectedMember,
-      type: "Temperature",
+      type: "SpO2",
     };
     mutation.mutate(formData);
     // Reset the form after submission
@@ -346,7 +345,7 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
           bg={"main.400"}
           color={"#fff"}
         >
-          Add Temperature Data
+          Add SpO2 Data
         </ModalHeader>
 
         <Divider />
@@ -373,11 +372,11 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
           </Flex>
 
           <FormControl mb={4}>
-            <FormLabel mb={1}>Temperature (°C)</FormLabel>
+            <FormLabel mb={1}>SpO2 (%)</FormLabel>
             <Input
               type="number"
-              placeholder="Enter Temperature (°C)"
-              {...register("temperature", { required: true })}
+              placeholder="Enter SpO2 (%)"
+              {...register("spo2", { required: true })}
             />
           </FormControl>
         </ModalBody>
@@ -422,6 +421,7 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
   });
 
   const onSubmit = (dataForm) => {
+    alert(6);
     let formData = {
       ...dataForm,
       user_id: userID,
@@ -430,7 +430,6 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
       id: data.id,
     };
     mutation.mutate(formData);
-    // Reset the form after submission
   };
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -447,7 +446,7 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
           bg={"main.400"}
           color={"#fff"}
         >
-          Update Temperature Data
+          Update SpO2 Data
         </ModalHeader>
 
         <Divider />
@@ -481,12 +480,12 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
           </Flex>
 
           <FormControl mb={4}>
-            <FormLabel mb={1}>Temperature (°C)</FormLabel>
+            <FormLabel mb={1}>SpO2 (%)</FormLabel>
             <Input
-              defaultValue={data.temperature}
+              defaultValue={data.spo2}
               type="number"
-              placeholder="Enter Temperature (°C)"
-              {...register("temperature", { required: true })}
+              placeholder="Enter spo2 (%)"
+              {...register("spo2", { required: true })}
             />
           </FormControl>
         </ModalBody>
@@ -539,7 +538,7 @@ const DeleteData = ({ onClose, isOpen, selectedMember, data }) => {
           </AlertDialogHeader>
 
           <AlertDialogBody fontSize={"md"} fontWeight={500}>
-            Are you sure? Do you want to delete Temperature data for date -{" "}
+            Are you sure? Do you want to delete SpO2 data for date -{" "}
             {data?.date}
           </AlertDialogBody>
 

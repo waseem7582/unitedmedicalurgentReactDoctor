@@ -16,14 +16,14 @@ import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET, UPDATE } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import DeleteDoctor from "./Delete";
 import { useNavigate } from "react-router-dom";
 import useHasPermission from "../../Hooks/HasPermission";
 import ShowToast from "../../Controllers/ShowToast";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import t from "../../Controllers/configs";
 
 export default function Doctors() {
@@ -32,7 +32,7 @@ export default function Doctors() {
   const [searchTerm, setsearchTerm] = useState();
   const {
     isOpen: DeleteisOpen,
-    // onOpen: DeleteonOpen,
+    onOpen: DeleteonOpen,
     onClose: DeleteonClose,
   } = useDisclosure();
   const navigate = useNavigate();
@@ -166,6 +166,7 @@ export default function Doctors() {
             onActionClick={
               <YourActionButton
                 onClick={handleActionClick}
+                DeleteonOpen={DeleteonOpen}
                 navigate={navigate}
               />
             }

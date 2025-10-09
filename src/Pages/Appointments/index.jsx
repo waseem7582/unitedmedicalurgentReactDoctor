@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { FiEdit } from "react-icons/fi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import { useNavigate } from "react-router-dom";
@@ -23,15 +23,15 @@ import getStatusBadge from "../../Hooks/StatusBadge";
 import getCancellationStatusBadge from "../../Hooks/CancellationReqBadge";
 import AddNewAppointment from "./AddNewAppointment";
 import { useEffect, useRef, useState } from "react";
-import Pagination from "../../Components/Pagination";
+import Pagination from "../../components/Pagination";
 import useDebounce from "../../Hooks/useDebounce";
-import ErrorPage from "../../Components/ErrorPage";
+import ErrorPage from "../../components/ErrorPage";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import moment from "moment";
 import { RefreshCwIcon } from "lucide-react";
 import t from "../../Controllers/configs";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import DateRangeCalender from "../../components/DateRangeCalender";
 
 const getPageIndices = (currentPage, itemsPerPage) => {
   const startIndex = (currentPage - 1) * itemsPerPage;

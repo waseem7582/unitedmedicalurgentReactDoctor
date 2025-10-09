@@ -22,7 +22,7 @@ import admin from "../../Controllers/admin";
 import showToast from "../../Controllers/ShowToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 
 const addPrescribeMedicines = async (data) => {
   const res = await ADD(admin.token, "add_prescribe_medicines", data);

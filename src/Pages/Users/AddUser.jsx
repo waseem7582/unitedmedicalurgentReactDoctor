@@ -33,10 +33,10 @@ import {
   default as showToast,
 } from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
-import ISDCODEMODAL from "../../Components/IsdModal";
+import ISDCODEMODAL from "../../components/IsdModal";
 import todayDate from "../../Controllers/today";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 
 export default function AddUser() {
   const navigate = useNavigate();

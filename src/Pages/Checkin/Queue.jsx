@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import useSettingsData from "../../Hooks/SettingData";
 import imageBaseURL from "../../Controllers/image";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import { useSearchParams } from "react-router-dom";
 import todayDate from "../../Controllers/today";
 

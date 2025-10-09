@@ -16,19 +16,19 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
-import BloodPressure from "../../Components/Vitals/BloodPressure";
+import BloodPressure from "../../components/Vitals/BloodPressure";
 import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
-import Loading from "../../Components/Loading";
-import UsersCombobox from "../../Components/UsersComboBox";
+import Loading from "../../components/Loading";
+import UsersCombobox from "../../components/UsersComboBox";
 import { useEffect, useState } from "react";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import DateRangeCalender from "../../components/DateRangeCalender";
 import moment from "moment";
-import BloodSugar from "../../Components/Vitals/BloodSugar";
-import SpO2 from "../../Components/Vitals/Spo2";
-import Temperature from "../../Components/Vitals/Temp";
-import Weight from "../../Components/Vitals/Weigjht";
+import BloodSugar from "../../components/Vitals/BloodSugar";
+import SpO2 from "../../components/Vitals/Spo2";
+import Temperature from "../../components/Vitals/Temp";
+import Weight from "../../components/Vitals/Weigjht";
 
 const Last30 = moment().subtract(30, "days").format("YYYY-MM-DD");
 const today = moment().format("YYYY-MM-DD");

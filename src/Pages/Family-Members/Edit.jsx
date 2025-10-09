@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GET, UPDATE } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import moment from "moment";
 import ShowToast from "../../Controllers/ShowToast";
 import todayDate from "../../Controllers/today";

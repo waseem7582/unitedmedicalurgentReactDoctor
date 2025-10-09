@@ -14,16 +14,16 @@ import { useEffect, useRef, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import useDebounce from "../../Hooks/useDebounce";
-import Pagination from "../../Components/Pagination";
+import Pagination from "../../components/Pagination";
 import useRolesData from "../../Hooks/UserRolesData";
 
 const ITEMS_PER_PAGE = 50;

@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import { GET } from "../../Controllers/ApiControllers";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import "swiper/swiper-bundle.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useQuery } from "@tanstack/react-query";

@@ -15,12 +15,12 @@ import { FaTrash } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 import useSearchFilter from "../../../Hooks/UseSearchFilter";
-import DynamicTable from "../../../Components/DataTable";
+import DynamicTable from "../../../components/DataTable";
 import { GET } from "../../../Controllers/ApiControllers";
 import admin from "../../../Controllers/admin";
 import AddSocialMedia from "./Add";
 import UpdateSocialMedia from "./Update";
-import DeleteSocial from "./delete.JSX";
+import DeleteSocial from "./Delete.jsx";
 
 export default function SocialMedia({ currentTab, activeTab }) {
   const { isOpen, onOpen, onClose } = useDisclosure();

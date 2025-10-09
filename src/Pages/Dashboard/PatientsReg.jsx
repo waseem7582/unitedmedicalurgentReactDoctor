@@ -6,8 +6,8 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
-import DynamicTable from "../../Components/DataTable";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import DynamicTable from "../../components/DataTable";
+import DateRangeCalender from "../../components/DateRangeCalender";
 import { daysBack } from "../../Controllers/dateConfig";
 
 const filterRecentData = (data, lastDays) => {

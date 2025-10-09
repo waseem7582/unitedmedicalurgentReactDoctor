@@ -6,12 +6,12 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/Components/ui/Command";
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/Components/ui/Popover";
+} from "@/components/ui/popover";
 import { Box, Button, Text, useColorMode } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 

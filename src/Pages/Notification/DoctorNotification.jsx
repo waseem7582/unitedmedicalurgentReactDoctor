@@ -11,12 +11,12 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { useNavigate } from "react-router-dom";
 import getFile from "./getfile";
 import printPrescription from "./getPrescription";
-import Pagination from "../../Components/Pagination";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import Pagination from "../../components/Pagination";
+import DateRangeCalender from "../../components/DateRangeCalender";
 import useDebounce from "../../Hooks/useDebounce";
 import moment from "moment";
 import { useState } from "react";

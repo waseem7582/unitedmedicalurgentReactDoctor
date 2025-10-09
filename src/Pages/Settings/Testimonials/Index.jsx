@@ -15,14 +15,14 @@ import { FaTrash } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 import useSearchFilter from "../../../Hooks/UseSearchFilter";
-import DynamicTable from "../../../Components/DataTable";
+import DynamicTable from "../../../components/DataTable";
 import { GET } from "../../../Controllers/ApiControllers";
 import admin from "../../../Controllers/admin";
-import DeleteSocial from "./delete.JSX";
+import DeleteSocial from "./Delete.jsx";
 import AddTestimonial from "./Add";
 import UpdateTastimonials from "./Update";
 import useHasPermission from "../../../Hooks/HasPermission";
-import NotAuth from "../../../Components/NotAuth";
+import NotAuth from "../../../components/NotAuth";
 
 export default function Testimonials() {
   const { isOpen, onOpen, onClose } = useDisclosure();

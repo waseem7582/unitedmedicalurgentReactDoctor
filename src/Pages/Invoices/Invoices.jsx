@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import moment from "moment";
@@ -18,10 +18,10 @@ import { Link } from "react-router-dom";
 import { TbDownload } from "react-icons/tb";
 import api from "../../Controllers/api";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import useDebounce from "../../Hooks/useDebounce";
-import Pagination from "../../Components/Pagination";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import Pagination from "../../components/Pagination";
+import DateRangeCalender from "../../components/DateRangeCalender";
 
 const getPageIndices = (currentPage, itemsPerPage) => {
   const startIndex = (currentPage - 1) * itemsPerPage;

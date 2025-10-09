@@ -30,7 +30,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import api from "../Controllers/api";
-import ForgetPassword from "../Components/ForgetPassword";
+import ForgetPassword from "../components/ForgetPassword";
 import moment from "moment";
 function getExpTime() {
   const timestamp = moment().add(24, "hours").valueOf();

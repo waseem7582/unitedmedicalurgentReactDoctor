@@ -22,7 +22,7 @@ import { UPDATE } from "../../Controllers/ApiControllers";
 import ShowToast from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
 import useHasPermission from "../../Hooks/HasPermission";
-import UsersCombobox from "../../Components/UsersComboBox";
+import UsersCombobox from "../../components/UsersComboBox";
 import useUserData from "../../Hooks/Users";
 
 export default function AssignRole({ isOpen, onClose, Roles }) {

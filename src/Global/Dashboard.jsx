@@ -2,7 +2,7 @@
 import React, { Suspense, useEffect } from "react";
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import Loading from "../Components/Loading";
+import Loading from "../components/Loading";
 import AllPrescription from "../Pages/Prescriptions/AllPrescription";
 import useSettingsData from "../Hooks/SettingData";
 import imageBaseURL from "../Controllers/image";

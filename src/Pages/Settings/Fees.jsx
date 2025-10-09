@@ -23,7 +23,7 @@ import {
 import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { GET, UPDATE } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import { useForm } from "react-hook-form";

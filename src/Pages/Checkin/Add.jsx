@@ -23,7 +23,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ADD, GET } from "../../Controllers/ApiControllers";
 import ShowToast from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
-import QRCodeScanner from "../../Components/QrScanner";
+import QRCodeScanner from "../../components/QrScanner";
 import todayDate from "../../Controllers/today";
 
 export default function AddCheckin({ isOpen, onClose }) {

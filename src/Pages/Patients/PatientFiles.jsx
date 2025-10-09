@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import imageBaseURL from "../../Controllers/image";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import moment from "moment";

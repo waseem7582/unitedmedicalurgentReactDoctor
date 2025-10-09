@@ -48,7 +48,7 @@ import {
 import { useTheme } from "@emotion/react";
 import moment from "moment";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 import { ADD, GET } from "../../Controllers/ApiControllers";
 import { useForm } from "react-hook-form";
 import showToast from "../../Controllers/ShowToast";
@@ -70,7 +70,6 @@ const handleDelete = async (data) => {
   }
   return res;
 };
-
 const handleUpdate = async (data) => {
   const res = await ADD(admin.token, "update_vitals", data);
   if (res.response !== 200) {
@@ -79,7 +78,7 @@ const handleUpdate = async (data) => {
   return res;
 };
 
-function Weight({ id, startDate, endDate, userID }) {
+function BloodSugar({ id, startDate, endDate, userID }) {
   const [selectedData, setselectedData] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -96,23 +95,22 @@ function Weight({ id, startDate, endDate, userID }) {
   const getData = async () => {
     const res = await GET(
       admin.token,
-      `get_vitals_family_member_id_type?family_member_id=${id}&type=Weight&start_date=${startDate}&end_date=${endDate}`
+      `get_vitals_family_member_id_type?family_member_id=${id}&type=Sugar&start_date=${startDate}&end_date=${endDate}`
     );
-
     return res.data;
   };
   const { data, isLoading } = useQuery({
-    queryKey: ["vitals-weight", id, startDate, endDate],
+    queryKey: ["vitals-sugar", id, startDate, endDate],
     queryFn: getData,
     enabled: !!id,
   });
 
-  const chartData = data
-    ?.map((item) => ({
-      dateTime: `${item.date} ${item.time}`,
-      weight: item.weight,
-    }))
-    .reverse();
+  const chartData = data?.map((item) => ({
+    dateTime: `${item.date} ${item.time}`,
+    random: item.sugar_random,
+    fasting: item.sugar_fasting,
+  }));
+  3;
 
   const systolicGradientId = "colorRandom";
   const diastolicGradientId = "colorFasting";
@@ -188,7 +186,7 @@ function Weight({ id, startDate, endDate, userID }) {
                 <Area
                   cursor={"pointer"}
                   type="monotone"
-                  dataKey="weight"
+                  dataKey="random"
                   stroke={strokecolorRandom}
                   strokeWidth={2}
                   fillOpacity={1}
@@ -202,6 +200,26 @@ function Weight({ id, startDate, endDate, userID }) {
                   }}
                   dot={{ stroke: strokecolorRandom, strokeWidth: 2, r: 1 }} // Show points
                   connectNulls={true}
+                  baseValue="dataMin"
+                />
+                <Area
+                  cursor={"pointer"}
+                  type="monotone"
+                  dataKey="fasting"
+                  stroke={strokecolorFasting}
+                  fillOpacity={1}
+                  strokeWidth={2}
+                  fill={`url(#${diastolicGradientId})`}
+                  name="Fasting Sugar"
+                  legendType="none" // Hide legend label
+                  dot={{ stroke: strokecolorFasting, strokeWidth: 2, r: 1 }} // Show points
+                  activeDot={{
+                    stroke: strokecolorFasting,
+                    strokeWidth: 3,
+                    r: 1,
+                  }}
+                  connectNulls={true}
+                  baseValue="dataMin"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -211,7 +229,7 @@ function Weight({ id, startDate, endDate, userID }) {
         <Box p={1} mt={2}>
           <Flex justify={"space-between"} alignItems={"center"}>
             <Text fontSize={["sm", "sm"]} fontWeight="bold">
-              Weight History -
+              Blood Sugar History -
             </Text>
             <Button
               size={"sm"}
@@ -233,7 +251,10 @@ function Weight({ id, startDate, endDate, userID }) {
                 <Thead>
                   <Tr bg={"blue.500"}>
                     <Th px={1} py={2} color={"#fff"}>
-                      Weight (KG)
+                      Fasting (Mg/dl)
+                    </Th>
+                    <Th px={1} py={2} color={"#fff"}>
+                      Random (Mg/dl)
                     </Th>
                     <Th px={1} py={2} color={"#fff"}>
                       Date
@@ -250,7 +271,14 @@ function Weight({ id, startDate, endDate, userID }) {
                   {data?.map((record) => (
                     <Tr key={record.id} fontSize={14}>
                       <Td px={1} py={2}>
-                        {record?.weight || 0} (KG)
+                        {record.sugar_fasting
+                          ? record.sugar_fasting + " " + "(Mg/dl)"
+                          : "N/A"}
+                      </Td>
+                      <Td px={1} py={2}>
+                        {record.sugar_random
+                          ? record.sugar_random + " " + "(Mg/dl)"
+                          : "N/A"}
                       </Td>
                       <Td px={1} py={2}>
                         {" "}
@@ -320,7 +348,7 @@ function Weight({ id, startDate, endDate, userID }) {
   );
 }
 
-export default Weight;
+export default BloodSugar;
 
 const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
   const now = new Date();
@@ -348,7 +376,7 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
       ...data,
       user_id: userID,
       family_member_id: selectedMember,
-      type: "Weight",
+      type: "Sugar",
     };
     mutation.mutate(formData);
     // Reset the form after submission
@@ -368,7 +396,7 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
           bg={"main.400"}
           color={"#fff"}
         >
-          Add Weight Data
+          Add Blood Sugar Data
         </ModalHeader>
 
         <Divider />
@@ -395,11 +423,20 @@ const AddNew = ({ onClose, isOpen, selectedMember, userID }) => {
           </Flex>
 
           <FormControl mb={4}>
-            <FormLabel mb={1}>Weight (KG)</FormLabel>
+            <FormLabel mb={1}>Fasting</FormLabel>
             <Input
               type="number"
-              placeholder="Enter Weight (KG)"
-              {...register("weight", { required: true })}
+              placeholder="Enter Fasting Blood sugar"
+              {...register("sugar_fasting", { required: true })}
+            />
+          </FormControl>
+
+          <FormControl mb={4}>
+            <FormLabel mb={1}>Random</FormLabel>
+            <Input
+              type="number"
+              placeholder="Enter Random Blood sugar"
+              {...register("sugar_random", { required: true })}
             />
           </FormControl>
         </ModalBody>
@@ -469,7 +506,7 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
           bg={"main.400"}
           color={"#fff"}
         >
-          Update Weight Data
+          Update Blood Sugar Data
         </ModalHeader>
 
         <Divider />
@@ -478,37 +515,40 @@ const Edit = ({ onClose, isOpen, selectedMember, data, userID }) => {
             <FormControl mb={4}>
               <FormLabel mb={1}>Date</FormLabel>
               <Input
-                isDisabled
+                max={todayDate()}
                 type="date"
                 defaultValue={data.date}
                 {...register("date", { required: true })}
-                _disabled={{
-                  color: "#000",
-                }}
               />
             </FormControl>
             <FormControl mb={4}>
               <FormLabel mb={1}>Time</FormLabel>
               <Input
-                isDisabled
                 type="time"
                 defaultValue={data.time}
                 textAlign={"left"}
                 {...register("time", { required: true })}
-                _disabled={{
-                  color: "#000",
-                }}
               />
             </FormControl>
           </Flex>
 
           <FormControl mb={4}>
-            <FormLabel mb={1}>Weight (KG)</FormLabel>
+            <FormLabel mb={1}>Fasting (Mg/dl)</FormLabel>
             <Input
-              defaultValue={data.weight}
+              defaultValue={data.sugar_fasting}
               type="number"
-              placeholder="Enter Weight (KG)"
-              {...register("weight", { required: true })}
+              placeholder="Enter Fasting Blood sugar"
+              {...register("sugar_fasting", { required: true })}
+            />
+          </FormControl>
+
+          <FormControl mb={4}>
+            <FormLabel mb={1}>Random (Mg/dl)</FormLabel>
+            <Input
+              defaultValue={data.sugar_random}
+              type="number"
+              placeholder="Enter Random Blood sugar"
+              {...register("sugar_random", { required: true })}
             />
           </FormControl>
         </ModalBody>
@@ -561,7 +601,7 @@ const DeleteData = ({ onClose, isOpen, selectedMember, data }) => {
           </AlertDialogHeader>
 
           <AlertDialogBody fontSize={"md"} fontWeight={500}>
-            Are you sure? Do you want to delete Weight data for date -{" "}
+            Are you sure? Do you want to delete Blood Sugar data for date -{" "}
             {data?.date}
           </AlertDialogBody>
 

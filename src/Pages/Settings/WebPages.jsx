@@ -15,7 +15,7 @@ import {
 import WysiwygEditor from "./Wsywig";
 import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../Controllers/ApiControllers";
-import Loading from "../../Components/Loading";
+import Loading from "../../components/Loading";
 
 const getWebPages = async () => {
   const res = await GET(admin.token, `get_web_pages`);

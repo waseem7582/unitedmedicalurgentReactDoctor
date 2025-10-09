@@ -1,9 +1,9 @@
 ﻿/* eslint-disable react/prop-types */
 import { GET } from "../../Controllers/ApiControllers";
 import { useQuery } from "@tanstack/react-query";
-import ErrorPage from "../../Components/ErrorPage";
+import ErrorPage from "../../components/ErrorPage";
 import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import admin from "../../Controllers/admin";
 import RatingStars from "../../Hooks/ShowRating";
 

@@ -1,2 +1,2 @@
-﻿const currency = "₹";
+﻿const currency = "$";
 export default currency;

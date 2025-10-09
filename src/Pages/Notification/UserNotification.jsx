@@ -12,17 +12,17 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
-import DynamicTable from "../../Components/DataTable";
+import DynamicTable from "../../components/DataTable";
 import { useNavigate } from "react-router-dom";
 import getFile from "./getfile";
 import AddUserNotification from "./AddUserNotifcation";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import useDebounce from "../../Hooks/useDebounce";
-import Pagination from "../../Components/Pagination";
-import DateRangeCalender from "../../Components/DateRangeCalender";
+import Pagination from "../../components/Pagination";
+import DateRangeCalender from "../../components/DateRangeCalender";
 
 const getPageIndices = (currentPage, itemsPerPage) => {
   const startIndex = (currentPage - 1) * itemsPerPage;

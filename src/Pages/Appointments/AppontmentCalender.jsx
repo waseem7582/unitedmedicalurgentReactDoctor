@@ -4,9 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import { useRef } from "react";
-import ErrorPage from "../../Components/ErrorPage";
+import ErrorPage from "../../components/ErrorPage";
 import useHasPermission from "../../Hooks/HasPermission";
-import NotAuth from "../../Components/NotAuth";
+import NotAuth from "../../components/NotAuth";
 import AppointmentsCalendar from "../Dashboard/Calender";
 
 export default function AppontmentCalender() {

@@ -35,8 +35,8 @@ import {
 } from "../../Controllers/ShowToast";
 import admin from "../../Controllers/admin";
 import imageBaseURL from "../../Controllers/image";
-import Loading from "../../Components/Loading";
-import ISDCODEMODAL from "../../Components/IsdModal";
+import Loading from "../../components/Loading";
+import ISDCODEMODAL from "../../components/IsdModal";
 import { max } from "moment";
 import todayDate from "../Controllers/today";
 
