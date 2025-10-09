@@ -145,7 +145,7 @@ src
     ├── Doctors
     │   ├── Add.jsx
     │   ├── Delete.jsx
-    │   ├── DoctAppoinrtments.jsx
+    │   ├── DoctAppointments.jsx
     │   ├── Index.jsx
     │   ├── Review.jsx
     │   └── Update.jsx

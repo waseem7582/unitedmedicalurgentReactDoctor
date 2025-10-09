@@ -60,7 +60,7 @@ import useHasPermission from "../../Hooks/HasPermission";
 import VideoTimeSlotes from "../../components/VideoTimeSlotes/TimeSlotes";
 import todayDate from "../../Controllers/today";
 import Review from "./Review";
-import DoctAppointments from "./DoctAppoinrtments";
+import DoctAppointments from "./DoctAppointments";
 import NotAuth from "../../components/NotAuth";
 
 const getSpclizeList = async () => {
