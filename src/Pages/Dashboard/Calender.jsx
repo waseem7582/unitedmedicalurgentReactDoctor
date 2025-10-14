@@ -24,7 +24,7 @@ const AppointmentsCalendar = ({ appointmentData }) => {
   // Convert appointment data to events format
   const events = appointmentData?.map((appointment) => ({
     id: appointment.id,
-    title: `Dr. ${appointment.doct_f_name} ${appointment.doct_l_name}'s Appointment with - ${appointment.patient_f_name} ${appointment.patient_l_name} - ${appointment.status}`,
+    title: `${appointment.doct_f_name} ${appointment.doct_l_name}'s Appointment with - ${appointment.patient_f_name} ${appointment.patient_l_name} - ${appointment.status}`,
     start: moment(`${appointment.date} ${appointment.time_slots}`).toDate(),
     end: moment(`${appointment.date} ${appointment.time_slots}`)
       .add(30, "minutes") // Assuming each appointment is 30 minutes long

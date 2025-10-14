@@ -160,7 +160,7 @@ const QueueList = () => {
                     key={doct.id}
                     value={JSON.stringify(doct)}
                   >
-                    Dr. {doct.f_name} {doct.l_name}
+                    {doct.f_name} {doct.l_name}
                   </option>
                 ))}
               </Select>
