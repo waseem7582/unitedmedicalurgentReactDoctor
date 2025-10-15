@@ -83,7 +83,7 @@ export default function UpdateDoctor() {
   });
 
   const navigate = useNavigate();
-  const [isLoading, setisLoading] = useState();
+  const [isLoading, setisLoading] = useState(false);
   const { register, handleSubmit } = useForm();
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -92,6 +92,11 @@ export default function UpdateDoctor() {
     doctorDetails?.specialization
   );
   const inputRef = useRef();
+  
+  // CERTIFICATE: State for certificate upload functionality
+  const [certificateFile, setCertificateFile] = useState(null);
+  const [certificatePreview, setCertificatePreview] = useState(null);
+  
   const [isd_code, setisd_code] = useState(doctorDetails?.isd_code);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { hasPermission } = useHasPermission();
@@ -101,8 +106,85 @@ export default function UpdateDoctor() {
     setspecializationID(doctorDetails?.specialization);
   }, [doctorDetails]);
 
-  // get doctor details
+  // CERTIFICATE: Function to handle certificate file upload
+  const handleCertificateUpload = async (file) => {
+    try {
+      setisLoading(true);
+      const formData = new FormData();
+      formData.append('doctor_id', param.id);
+      formData.append('certificate', file);
+      
+      // Use the upload_doctor_certificate API endpoint
+      const res = await ADD(admin.token, "upload_doctor_certificate", formData, true);
+      setisLoading(false);
+      if (res.response === 200) {
+        ShowToast(toast, "success", "Certificate uploaded successfully!");
+        queryClient.invalidateQueries(["doctor", param.id]);
+        setCertificateFile(null);
+        setCertificatePreview(null);
+      } else {
+        ShowToast(toast, "error", res.message || "Failed to upload certificate");
+      }
+    } catch (error) {
+      setisLoading(false);
+      ShowToast(toast, "error", "Error uploading certificate: " + error.message);
+    }
+  };
 
+  // CERTIFICATE: Function to handle certificate deletion
+  const handleCertificateDelete = async () => {
+    try {
+      setisLoading(true);
+      // Update doctor with null certificate to remove it
+      const res = await ADD(admin.token, "update_doctor", {
+        id: param.id,
+        certificate: null
+      });
+      setisLoading(false);
+      if (res.response === 200) {
+        ShowToast(toast, "success", "Certificate removed successfully!");
+        queryClient.invalidateQueries(["doctor", param.id]);
+      } else {
+        ShowToast(toast, "error", res.message || "Failed to remove certificate");
+      }
+    } catch (error) {
+      setisLoading(false);
+      ShowToast(toast, "error", "Error removing certificate: " + error.message);
+    }
+  };
+
+  // CERTIFICATE: Function to handle certificate file selection
+  const handleCertificateChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Check file type and size
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+      const maxSize = 2 * 1024 * 1024; // 2MB
+      
+      if (!validTypes.includes(file.type)) {
+        ShowToast(toast, "error", "Please select a valid file (JPG, PNG, PDF)");
+        return;
+      }
+      
+      if (file.size > maxSize) {
+        ShowToast(toast, "error", "File size must be less than 2MB");
+        return;
+      }
+      
+      setCertificateFile(file);
+      
+      // Create preview for images
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => setCertificatePreview(e.target.result);
+        reader.readAsDataURL(file);
+      } else {
+        setCertificatePreview(null);
+      }
+    }
+  };
+
+  // get doctor details
   const AddNew = async (data) => {
     if (data.password && data.password != data.cnfPassword) {
       return showToast(toast, "error", "password does not match");
@@ -132,7 +214,7 @@ export default function UpdateDoctor() {
       const res = await ADD(admin.token, "update_doctor", formData);
       setisLoading(false);
       if (res.response === 200) {
-        ShowToast(toast, "success", "Doctor Updateddddd!");
+        ShowToast(toast, "success", "Doctor Updated!");
         queryClient.invalidateQueries(["doctor", param.id]);
       } else {
         ShowToast(toast, "error", res.message);
@@ -162,6 +244,7 @@ export default function UpdateDoctor() {
       ShowToast(toast, "error", JSON.stringify(error));
     }
   };
+  
   const handleFileDelete = async () => {
     try {
       setisLoading(true);
@@ -248,15 +331,12 @@ export default function UpdateDoctor() {
                           </Text>
                         </Flex>
                         <Text fontSize={"sm"} fontWeight={600}>
-                          {" "}
-                          {doctorDetails?.total_appointment_done} Appointments
-                          Done
+                            {" "}
+                          {doctorDetails?.total_appointment_done} Appointments Done
                         </Text>
                       </Flex>
                     </Flex>
-
                     <Divider mt={2} mb={5} />
-
                     <Flex gap={10} mt={5} align={"flex-end"}>
                       <FormControl isRequired>
                         <FormLabel>First Name</FormLabel>
@@ -268,7 +348,6 @@ export default function UpdateDoctor() {
                           defaultValue={doctorDetails?.f_name}
                         />
                       </FormControl>
-
                       <FormControl isRequired>
                         <FormLabel>Last Name</FormLabel>
                         <Input
@@ -279,7 +358,7 @@ export default function UpdateDoctor() {
                           defaultValue={doctorDetails?.l_name}
                         />
                       </FormControl>
-                      <FormControl>
+                   <FormControl>
                         <FormControl
                           display="flex"
                           alignItems="center"
@@ -324,7 +403,6 @@ export default function UpdateDoctor() {
                         </FormControl>
                       </FormControl>
                     </Flex>
-
                     <Flex gap={10} mt={5}>
                       <FormControl isRequired>
                         <FormLabel>Date Of Birth</FormLabel>
@@ -351,7 +429,6 @@ export default function UpdateDoctor() {
                           <option value="Male">Male</option>
                         </Select>
                       </FormControl>
-
                       <FormControl isRequired>
                         <FormLabel>Years OF Experience</FormLabel>
                         <Input
@@ -366,6 +443,7 @@ export default function UpdateDoctor() {
                     </Flex>
                   </CardBody>
                 </Card>
+
                 <Card mt={5} bg={useColorModeValue("white", "gray.700")}>
                   <CardBody p={3} as={"form"}>
                     <Flex align={"center"} justify={"space-between"}>
@@ -374,9 +452,7 @@ export default function UpdateDoctor() {
                         Contact Details -
                       </Heading>{" "}
                     </Flex>
-
                     <Divider mt={2} mb={5} />
-
                     <Flex gap={10} mt={5}>
                       <FormControl isRequired>
                         <FormLabel>Email</FormLabel>
@@ -389,7 +465,6 @@ export default function UpdateDoctor() {
                           defaultValue={doctorDetails?.email}
                         />
                       </FormControl>
-
                       <FormControl mt={0} isRequired>
                         <FormLabel>Phone </FormLabel>
                         <InputGroup size={"sm"}>
@@ -442,6 +517,7 @@ export default function UpdateDoctor() {
                     </Flex>
                   </CardBody>
                 </Card>
+
                 <Card mt={5} bg={useColorModeValue("white", "gray.700")}>
                   <CardBody p={3} as={"form"}>
                     <Flex align={"center"} justify={"space-between"}>
@@ -450,9 +526,7 @@ export default function UpdateDoctor() {
                         Education And Other Deta -
                       </Heading>{" "}
                     </Flex>
-
                     <Divider mt={2} mb={5} />
-
                     <Flex gap={10} mt={5}>
                       <FormControl isRequired>
                         <FormLabel>Department</FormLabel>
@@ -463,20 +537,16 @@ export default function UpdateDoctor() {
                           defaultId={doctorDetails?.department}
                         />
                       </FormControl>
-
                       <FormControl isRequired size={"sm"}>
                         <FormLabel>Specialization</FormLabel>
                         <MultiTagInput
                           data={specializationList}
                           setState={setspecializationID}
                           name={"Specialization"}
-                          defaultSelected={doctorDetails?.specialization.split(
-                            ", "
-                          )}
+                          defaultSelected={doctorDetails?.specialization?.split(", ")}
                         />
                       </FormControl>
                     </Flex>
-
                     <Flex gap={10} mt={5}>
                       <FormControl>
                         <FormLabel>Description</FormLabel>
@@ -492,6 +562,8 @@ export default function UpdateDoctor() {
                     </Flex>
                   </CardBody>
                 </Card>
+
+                {/* Address Card */}
                 <Card mt={5} bg={useColorModeValue("white", "gray.700")}>
                   <CardBody p={3} as={"form"}>
                     <Flex align={"center"} justify={"space-between"}>
@@ -500,7 +572,6 @@ export default function UpdateDoctor() {
                         Address -{" "}
                       </Heading>{" "}
                     </Flex>
-
                     <Divider mt={2} mb={5} />
                     <Flex gap={10}>
                       <FormControl>
@@ -508,13 +579,12 @@ export default function UpdateDoctor() {
                         <Input
                           size={"sm"}
                           borderRadius={6}
-                          type="email"
+                          type="text"
                           placeholder="State"
                           {...register("state")}
                           defaultValue={doctorDetails?.state}
                         />
                       </FormControl>
-
                       <FormControl>
                         <FormLabel>City</FormLabel>
                         <Input
@@ -538,7 +608,6 @@ export default function UpdateDoctor() {
                         />
                       </FormControl>
                     </Flex>
-
                     <Flex gap={10} mt={5}>
                       <FormControl>
                         <FormLabel>Address</FormLabel>
@@ -553,6 +622,8 @@ export default function UpdateDoctor() {
                     </Flex>
                   </CardBody>
                 </Card>
+
+                {/* Password Card */}
                 <Card mt={5} bg={useColorModeValue("white", "gray.700")}>
                   <CardBody p={3} as={"form"}>
                     <Flex align={"center"} justify={"space-between"}>
@@ -561,7 +632,6 @@ export default function UpdateDoctor() {
                         Password -{" "}
                       </Heading>{" "}
                     </Flex>
-
                     <Divider mt={2} mb={5} />
                     <Flex gap={10}>
                       <FormControl>
@@ -587,6 +657,7 @@ export default function UpdateDoctor() {
                     </Flex>
                   </CardBody>
                 </Card>
+
                 <Button
                   w={"100%"}
                   mt={10}
@@ -600,6 +671,7 @@ export default function UpdateDoctor() {
               </Box>
 
               <Box w={"25%"}>
+                {/* Profile Picture Card */}
                 <Card
                   mt={5}
                   bg={useColorModeValue("white", "gray.700")}
@@ -663,6 +735,7 @@ export default function UpdateDoctor() {
                   </CardBody>
                 </Card>
 
+                {/* Social Accounts Card */}
                 <Card
                   mt={5}
                   bg={useColorModeValue("white", "gray.700")}
@@ -676,10 +749,7 @@ export default function UpdateDoctor() {
                     <Divider mt={2} mb={5} />
                     <InputGroup mt={3} size="sm">
                       <InputLeftElement pointerEvents="none">
-                        <CgFacebook
-                          size={"20"}
-                          color={theme.colors.facebook[500]}
-                        />
+                        <CgFacebook size={"20"} color={theme.colors.facebook[500]} />
                       </InputLeftElement>
                       <Input
                         borderRadius={6}
@@ -690,18 +760,11 @@ export default function UpdateDoctor() {
                       <InputRightElement
                         cursor={"pointer"}
                         onClick={() => {
-                          const isValidUrl =
-                            /^(ftp|http|https):\/\/[^ "]+$/.test(
-                              doctorDetails?.fb_linik
-                            );
+                          const isValidUrl = /^(ftp|http|https):\/\/[^ "]+$/.test(doctorDetails?.fb_linik);
                           if (isValidUrl) {
                             window.open(doctorDetails?.fb_linik, "_blank");
                           } else {
-                            ShowToast(
-                              toast,
-                              "error",
-                              "This is not a valid url"
-                            );
+                            ShowToast(toast, "error", "This is not a valid url");
                           }
                         }}
                       >
@@ -710,10 +773,7 @@ export default function UpdateDoctor() {
                     </InputGroup>
                     <InputGroup mt={3} size="sm">
                       <InputLeftElement pointerEvents="none">
-                        <AiOutlineTwitter
-                          size={"20"}
-                          color={theme.colors.twitter[500]}
-                        />
+                        <AiOutlineTwitter size={"20"} color={theme.colors.twitter[500]} />
                       </InputLeftElement>
                       <Input
                         borderRadius={6}
@@ -724,18 +784,11 @@ export default function UpdateDoctor() {
                       <InputRightElement
                         cursor={"pointer"}
                         onClick={() => {
-                          const isValidUrl =
-                            /^(ftp|http|https):\/\/[^ "]+$/.test(
-                              doctorDetails?.insta_link
-                            );
+                          const isValidUrl = /^(ftp|http|https):\/\/[^ "]+$/.test(doctorDetails?.twitter_link);
                           if (isValidUrl) {
-                            window.open(doctorDetails?.insta_link, "_blank");
+                            window.open(doctorDetails?.twitter_link, "_blank");
                           } else {
-                            ShowToast(
-                              toast,
-                              "error",
-                              "This is not a valid url"
-                            );
+                            ShowToast(toast, "error", "This is not a valid url");
                           }
                         }}
                       >
@@ -744,10 +797,7 @@ export default function UpdateDoctor() {
                     </InputGroup>
                     <InputGroup mt={3} size="sm">
                       <InputLeftElement pointerEvents="none">
-                        <BsInstagram
-                          size={"20"}
-                          color={theme.colors.red[400]}
-                        />
+                        <BsInstagram size={"20"} color={theme.colors.red[400]} />
                       </InputLeftElement>
                       <Input
                         borderRadius={6}
@@ -758,18 +808,11 @@ export default function UpdateDoctor() {
                       <InputRightElement
                         cursor={"pointer"}
                         onClick={() => {
-                          const isValidUrl =
-                            /^(ftp|http|https):\/\/[^ "]+$/.test(
-                              doctorDetails?.insta_link
-                            );
+                          const isValidUrl = /^(ftp|http|https):\/\/[^ "]+$/.test(doctorDetails?.insta_link);
                           if (isValidUrl) {
                             window.open(doctorDetails?.insta_link, "_blank");
                           } else {
-                            ShowToast(
-                              toast,
-                              "error",
-                              "This is not a valid url"
-                            );
+                            ShowToast(toast, "error", "This is not a valid url");
                           }
                         }}
                       >
@@ -778,10 +821,7 @@ export default function UpdateDoctor() {
                     </InputGroup>
                     <InputGroup mt={3} size="sm">
                       <InputLeftElement pointerEvents="none">
-                        <AiFillYoutube
-                          size={20}
-                          color={theme.colors.red[600]}
-                        />
+                        <AiFillYoutube size={20} color={theme.colors.red[600]} />
                       </InputLeftElement>
                       <Input
                         borderRadius={6}
@@ -792,18 +832,11 @@ export default function UpdateDoctor() {
                       <InputRightElement
                         cursor={"pointer"}
                         onClick={() => {
-                          const isValidUrl =
-                            /^(ftp|http|https):\/\/[^ "]+$/.test(
-                              doctorDetails?.you_tube_link
-                            );
+                          const isValidUrl = /^(ftp|http|https):\/\/[^ "]+$/.test(doctorDetails?.you_tube_link);
                           if (isValidUrl) {
                             window.open(doctorDetails?.you_tube_link, "_blank");
                           } else {
-                            ShowToast(
-                              toast,
-                              "error",
-                              "This is not a valid url"
-                            );
+                            ShowToast(toast, "error", "This is not a valid url");
                           }
                         }}
                       >
@@ -812,6 +845,8 @@ export default function UpdateDoctor() {
                     </InputGroup>
                   </CardBody>
                 </Card>
+
+                {/* Fees Card */}
                 <Card
                   mt={5}
                   bg={useColorModeValue("white", "gray.700")}
@@ -823,7 +858,6 @@ export default function UpdateDoctor() {
                       Fees
                     </Heading>
                     <Divider mt={2} mb={2} />
-
                     <FormControl>
                       <FormLabel>OPD Fee</FormLabel>
                       <Input
@@ -857,6 +891,114 @@ export default function UpdateDoctor() {
                         defaultValue={doctorDetails?.emg_fee}
                       />
                     </FormControl>
+                  </CardBody>
+                </Card>
+
+                {/* CERTIFICATE: Certificate Upload Section */}
+                <Card
+                  mt={5}
+                  bg={useColorModeValue("white", "gray.700")}
+                  h={"fit-content"}
+                  pb={5}
+                >
+                  <CardBody p={2}>
+                    <Heading as={"h3"} size={"sm"}>
+                      Doctor Certificate
+                    </Heading>
+                    <Text fontSize="xs" color="gray.500" mt={1}>
+                      Upload certificate for QR code verification (JPG, PNG, PDF - Max 2MB)
+                    </Text>
+                    <Divider mt={2} mb={3} />
+
+                    {/* Current Certificate Display */}
+                    {doctorDetails?.certificate && (
+                      <Box mb={4} p={3} border="1px" borderColor="gray.200" borderRadius="md">
+                        <Text fontSize="sm" fontWeight="bold" mb={2}>
+                          Current Certificate:
+                        </Text>
+                        <Flex align="center" justify="space-between">
+                          <Text fontSize="xs" color="green.600">
+                            ✓ Certificate uploaded
+                          </Text>
+                          <Button
+                            size="xs"
+                            colorScheme="red"
+                            variant="outline"
+                            onClick={handleCertificateDelete}
+                            isLoading={isLoading}
+                          >
+                            Remove
+                          </Button>
+                        </Flex>
+                        <Button
+                          size="xs"
+                          mt={2}
+                          w="full"
+                          as="a"
+                          href={`${imageBaseURL}/${doctorDetails.certificate}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View Certificate
+                        </Button>
+                      </Box>
+                    )}
+
+                    {/* Certificate Upload */}
+                    <VStack spacing={3} align="stretch">
+                      <Input
+                        size={"sm"}
+                        borderRadius={6}
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.pdf"
+                        onChange={handleCertificateChange}
+                      />
+                      
+                      {/* File Preview */}
+                      {certificatePreview && (
+                        <Box mt={2}>
+                          <Text fontSize="sm" fontWeight="medium" mb={2}>
+                            Preview:
+                          </Text>
+                          <Image
+                            src={certificatePreview}
+                            alt="Certificate preview"
+                            maxH="200px"
+                            objectFit="contain"
+                            border="1px"
+                            borderColor="gray.200"
+                            borderRadius="md"
+                          />
+                        </Box>
+                      )}
+
+                      {certificateFile && (
+                        <Button
+                          size="sm"
+                          colorScheme="blue"
+                          onClick={() => handleCertificateUpload(certificateFile)}
+                          isLoading={isLoading}
+                          w="full"
+                        >
+                          Upload Certificate
+                        </Button>
+                      )}
+
+                      {/* QR Code Status Info */}
+                      {doctorDetails?.certificate && (
+                        <Box mt={4} p={3} border="1px" borderColor="green.200" borderRadius="md" bg="green.50">
+                          <Text fontSize="sm" fontWeight="bold" mb={2} color="green.700">
+                            ✓ QR Code Ready
+                          </Text>
+                          <Text fontSize="xs" color="green.600" mb={3}>
+                            Certificate uploaded successfully. The QR code on the user side will now show this certificate when scanned.
+                          </Text>
+                          <Text fontSize="xs" color="gray.600">
+                            Users can scan the QR code on the doctor profile page to view this certificate.
+                          </Text>
+                        </Box>
+                      )}
+                    </VStack>
                   </CardBody>
                 </Card>
               </Box>
@@ -920,13 +1062,13 @@ const IsActiveSwitch = ({ id, isActive }) => {
         size={"sm"}
         onChange={(e) => {
           let active = e.target.checked ? 1 : 0;
-
           mutation.mutate({ id, active });
         }}
       />
     </FormControl>
   );
 };
+
 const StopBooking = ({ id, isStop_booking }) => {
   const { hasPermission } = useHasPermission();
   const toast = useToast();
@@ -962,7 +1104,6 @@ const StopBooking = ({ id, isStop_booking }) => {
         size={"sm"}
         onChange={(e) => {
           let stop_booking = e.target.checked ? 1 : 0;
-
           mutation.mutate({ id, stop_booking });
         }}
       />

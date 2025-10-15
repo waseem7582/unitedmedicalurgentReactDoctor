@@ -51,11 +51,57 @@ export default function AddDoctor() {
 
   const inputRef = useRef();
 
+  // CERTIFICATE UPLOAD STATES 
+  const [certificateFile, setCertificateFile] = useState(null);        // Stores the selected certificate file object
+  const [certificatePreview, setCertificatePreview] = useState(null);  // Stores image preview URL for certificate display
+
+    // HANDLE PROFILE PICTURE CHANGE
+  
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setprofilePicture(selectedFile);
   };
 
+  // ==================== CERTIFICATE UPLOAD FUNCTIONS ====================
+
+  /**
+   * @param {Event} event - The file input change event
+   */
+  const handleCertificateChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Define allowed file types for certificates
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+      const maxSize = 2 * 1024 * 1024; 
+      
+      if (!validTypes.includes(file.type)) {
+        ShowToast(toast, "error", "Please select a valid file (JPG, PNG, PDF)");
+        return;
+      }
+      if (file.size > maxSize) {
+        ShowToast(toast, "error", "File size must be less than 2MB");
+        return;
+      }
+      
+      setCertificateFile(file);
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => setCertificatePreview(e.target.result);
+        reader.readAsDataURL(file); // Convert file to data URL for preview
+      } else {
+        setCertificatePreview(null); // No preview for PDF files
+      }
+    }
+  };
+
+  // HANDLE CERTIFICATE REMOVE
+  const handleCertificateRemove = () => {
+    setCertificateFile(null);
+    setCertificatePreview(null);
+  };
+
+
+    // ADD NEW DOCTOR
   const AddNew = async (data) => {
     if (data.password != data.cnfPassword) {
       return showToast(toast, "error", "password does not match");
@@ -69,20 +115,34 @@ export default function AddDoctor() {
       return showToast(toast, "error", "select specialization");
     }
 
-    let formData = {
-      image: profilePicture,
-      department: departmentID,
-      specialization: specializationID.join(", "),
-      active: 0,
-      ...data,
-    };
+    // Create FormData object to handle file uploads
+    let formData = new FormData(); 
+    formData.append('f_name', data.f_name);
+    formData.append('l_name', data.l_name);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    formData.append('phone', data.phone);
+    formData.append('dob', data.dob);
+    formData.append('gender', data.gender);
+    formData.append('ex_year', data.ex_year);
+    formData.append('department', departmentID);
+    formData.append('specialization', specializationID.join(", "));
+    formData.append('active', 0);
+    formData.append('isd_code', isd_code);
+    if (profilePicture) {
+      formData.append('image', profilePicture);
+    }
+    if (certificateFile) {
+      formData.append('certificate', certificateFile);
+    }
 
     try {
       setisLoading(true);
-      const res = await ADD(admin.token, "add_doctor", formData);
+      // Send form data to API (true parameter indicates file upload)
+      const res = await ADD(admin.token, "add_doctor", formData, true);
       setisLoading(false);
       if (res.response === 200) {
-        ShowToast(toast, "success", "Doctor Added!");
+        ShowToast(toast, "success", "Doctor Added Successfully!");
         queryClient.invalidateQueries("doctors");
         reset();
         navigate(`/doctor/update/${res.id}`);
@@ -96,6 +156,8 @@ export default function AddDoctor() {
       ShowToast(toast, "error", JSON.stringify(error));
     }
   };
+
+  // API QUERIES 
   const getDepartmentList = async () => {
     const res = await GET(admin.token, "get_department_active");
     return res.data;
@@ -260,6 +322,87 @@ export default function AddDoctor() {
               </FormControl>
             </Flex>
 
+            {/* This section appears after specialization for certificate upload */}
+            <Card mt={5} bg={useColorModeValue("gray.50", "gray.600")}>
+              <CardBody p={3}>
+                <Text fontSize="md" fontWeight="bold" mb={3}>
+                  Doctor Certificate (Optional)
+                </Text>
+                <Text fontSize="xs" color="gray.500" mb={3}>
+                  Upload doctor's certificate for QR code verification (JPG, PNG, PDF - Max 2MB)
+                </Text>
+                
+                <VStack spacing={3} align="stretch">
+                  {/* ========== CERTIFICATE FILE INPUT ========== */}
+                  <Input
+                    size={"sm"}
+                    borderRadius={6}
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"  // Only accept these file types
+                    onChange={handleCertificateChange}  // Handle file selection
+                  />
+                  
+                  {/* ========== CERTIFICATE PREVIEW SECTION ========== */}
+                  {/* Shows preview for image files (not PDFs) */}
+                  {certificatePreview && (
+                    <Box mt={2}>
+                      <Text fontSize="sm" fontWeight="medium" mb={2}>
+                        Certificate Preview:
+                      </Text>
+                      <Flex align="center" gap={3}>
+                        <Image
+                          src={certificatePreview}
+                          alt="Certificate preview"
+                          maxH="150px"
+                          objectFit="contain"
+                          border="1px"
+                          borderColor="gray.200"
+                          borderRadius="md"
+                        />
+                        {/* Remove button for certificate */}
+                        <Button
+                          size="xs"
+                          colorScheme="red"
+                          variant="outline"
+                          onClick={handleCertificateRemove}
+                        >
+                          Remove
+                        </Button>
+                      </Flex>
+                    </Box>
+                  )}
+
+                  {/* ========== PDF FILE INDICATOR ========== */}
+                  {/* Shows when PDF file is selected (no preview available) */}
+                  {certificateFile && certificateFile.type === 'application/pdf' && (
+                    <Box mt={2} p={3} border="1px" borderColor="blue.200" borderRadius="md" bg="blue.50">
+                      <Flex align="center" justify="space-between">
+                        <Text fontSize="sm" fontWeight="medium" color="blue.700">
+                          📄 PDF Certificate Selected: {certificateFile.name}
+                        </Text>
+                        <Button
+                          size="xs"
+                          colorScheme="red"
+                          variant="outline"
+                          onClick={handleCertificateRemove}
+                        >
+                          Remove
+                        </Button>
+                      </Flex>
+                    </Box>
+                  )}
+
+                  {/* ========== CERTIFICATE UPLOAD INFO ========== */}
+                  <Text fontSize="xs" color="gray.600" mt={2}>
+                    💡 This certificate will be used for QR code verification. 
+                    Users can scan the QR code on the doctor profile to view this certificate.
+                  </Text>
+                </VStack>
+              </CardBody>
+            </Card>
+            {/* ==================== END OF CERTIFICATE UPLOAD SECTION ==================== */}
+
+            {/* ========== SUBMIT BUTTON ========== */}
             <Button
               w={"100%"}
               mt={10}
