@@ -658,6 +658,111 @@ export default function UpdateDoctor() {
                   </CardBody>
                 </Card>
 
+                {/* CERTIFICATE: Certificate Upload Section */}
+                <Card
+                  mt={5}
+                  bg={useColorModeValue("white", "gray.700")}
+                  h={"fit-content"}
+                  pb={5}
+                >
+                  <CardBody p={2}>
+                    <Heading as={"h3"} size={"sm"}>
+                      Doctor Certificate
+                    </Heading>
+                    <Text fontSize="xs" color="gray.500" mt={1}>
+                      Upload certificate for QR code verification (JPG, PNG, PDF - Max 2MB)
+                    </Text>
+                    <Divider mt={2} mb={3} />
+
+                    {/* Current Certificate Display */}
+                    {doctorDetails?.certificate && (
+                      <Box mb={4} p={3} border="1px" borderColor="gray.200" borderRadius="md">
+                        <Text fontSize="sm" fontWeight="bold" mb={2}>
+                          Current Certificate:
+                        </Text>
+                        <Flex align="center" justify="space-between">
+                          <Text fontSize="xs" color="green.600">
+                            ✓ Certificate uploaded
+                          </Text>
+                          <Button
+                            size="xs"
+                            colorScheme="red"
+                            variant="outline"
+                            onClick={handleCertificateDelete}
+                            isLoading={isLoading}
+                          >
+                            Remove
+                          </Button>
+                        </Flex>
+                        <Button
+                          size="xs"
+                          mt={2}
+                          w="full"
+                          as="a"
+                          href={`${imageBaseURL}/${doctorDetails.certificate}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View Certificate
+                        </Button>
+                      </Box>
+                    )}
+
+                    {/* Certificate Upload */}
+                    <VStack spacing={3} align="stretch">
+                      <Input
+                        size={"sm"}
+                        borderRadius={6}
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.pdf"
+                        onChange={handleCertificateChange}
+                      />
+                      
+                      {/* File Preview */}
+                      {certificatePreview && (
+                        <Box mt={2}>
+                          <Text fontSize="sm" fontWeight="medium" mb={2}>
+                            Preview:
+                          </Text>
+                          <Image
+                            src={certificatePreview}
+                            alt="Certificate preview"
+                            maxH="200px"
+                            objectFit="contain"
+                            border="1px"
+                            borderColor="gray.200"
+                            borderRadius="md"
+                          />
+                        </Box>
+                      )}
+
+                      {certificateFile && (
+                        <Button
+                          size="sm"
+                          colorScheme="blue"
+                          onClick={() => handleCertificateUpload(certificateFile)}
+                          isLoading={isLoading}
+                          w="full"
+                        >
+                          Upload Certificate
+                        </Button>
+                      )}
+
+                      {/* QR Code Status Info */}
+                      {doctorDetails?.certificate && (
+                        <Box mt={4} p={3} border="1px" borderColor="green.200" borderRadius="md" bg="green.50">
+                          <Text fontSize="sm" fontWeight="bold" mb={2} color="green.700">
+                            ✓ QR Code Ready
+                          </Text>
+                          <Text fontSize="xs" color="gray.600">
+                            Users can scan the QR code on the doctor profile page to view this certificate.
+                          </Text>
+                        </Box>
+                      )}
+                    </VStack>
+                  </CardBody>
+                </Card>
+
                 <Button
                   w={"100%"}
                   mt={10}
@@ -891,114 +996,6 @@ export default function UpdateDoctor() {
                         defaultValue={doctorDetails?.emg_fee}
                       />
                     </FormControl>
-                  </CardBody>
-                </Card>
-
-                {/* CERTIFICATE: Certificate Upload Section */}
-                <Card
-                  mt={5}
-                  bg={useColorModeValue("white", "gray.700")}
-                  h={"fit-content"}
-                  pb={5}
-                >
-                  <CardBody p={2}>
-                    <Heading as={"h3"} size={"sm"}>
-                      Doctor Certificate
-                    </Heading>
-                    <Text fontSize="xs" color="gray.500" mt={1}>
-                      Upload certificate for QR code verification (JPG, PNG, PDF - Max 2MB)
-                    </Text>
-                    <Divider mt={2} mb={3} />
-
-                    {/* Current Certificate Display */}
-                    {doctorDetails?.certificate && (
-                      <Box mb={4} p={3} border="1px" borderColor="gray.200" borderRadius="md">
-                        <Text fontSize="sm" fontWeight="bold" mb={2}>
-                          Current Certificate:
-                        </Text>
-                        <Flex align="center" justify="space-between">
-                          <Text fontSize="xs" color="green.600">
-                            ✓ Certificate uploaded
-                          </Text>
-                          <Button
-                            size="xs"
-                            colorScheme="red"
-                            variant="outline"
-                            onClick={handleCertificateDelete}
-                            isLoading={isLoading}
-                          >
-                            Remove
-                          </Button>
-                        </Flex>
-                        <Button
-                          size="xs"
-                          mt={2}
-                          w="full"
-                          as="a"
-                          href={`${imageBaseURL}/${doctorDetails.certificate}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          View Certificate
-                        </Button>
-                      </Box>
-                    )}
-
-                    {/* Certificate Upload */}
-                    <VStack spacing={3} align="stretch">
-                      <Input
-                        size={"sm"}
-                        borderRadius={6}
-                        type="file"
-                        accept=".jpg,.jpeg,.png,.pdf"
-                        onChange={handleCertificateChange}
-                      />
-                      
-                      {/* File Preview */}
-                      {certificatePreview && (
-                        <Box mt={2}>
-                          <Text fontSize="sm" fontWeight="medium" mb={2}>
-                            Preview:
-                          </Text>
-                          <Image
-                            src={certificatePreview}
-                            alt="Certificate preview"
-                            maxH="200px"
-                            objectFit="contain"
-                            border="1px"
-                            borderColor="gray.200"
-                            borderRadius="md"
-                          />
-                        </Box>
-                      )}
-
-                      {certificateFile && (
-                        <Button
-                          size="sm"
-                          colorScheme="blue"
-                          onClick={() => handleCertificateUpload(certificateFile)}
-                          isLoading={isLoading}
-                          w="full"
-                        >
-                          Upload Certificate
-                        </Button>
-                      )}
-
-                      {/* QR Code Status Info */}
-                      {doctorDetails?.certificate && (
-                        <Box mt={4} p={3} border="1px" borderColor="green.200" borderRadius="md" bg="green.50">
-                          <Text fontSize="sm" fontWeight="bold" mb={2} color="green.700">
-                            ✓ QR Code Ready
-                          </Text>
-                          <Text fontSize="xs" color="green.600" mb={3}>
-                            Certificate uploaded successfully. The QR code on the user side will now show this certificate when scanned.
-                          </Text>
-                          <Text fontSize="xs" color="gray.600">
-                            Users can scan the QR code on the doctor profile page to view this certificate.
-                          </Text>
-                        </Box>
-                      )}
-                    </VStack>
                   </CardBody>
                 </Card>
               </Box>

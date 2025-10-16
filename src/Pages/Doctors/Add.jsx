@@ -52,8 +52,8 @@ export default function AddDoctor() {
   const inputRef = useRef();
 
   // CERTIFICATE UPLOAD STATES 
-  const [certificateFile, setCertificateFile] = useState(null);        // Stores the selected certificate file object
-  const [certificatePreview, setCertificatePreview] = useState(null);  // Stores image preview URL for certificate display
+  const [certificateFile, setCertificateFile] = useState(null); 
+  const [certificatePreview, setCertificatePreview] = useState(null);
 
     // HANDLE PROFILE PICTURE CHANGE
   
@@ -62,7 +62,6 @@ export default function AddDoctor() {
     setprofilePicture(selectedFile);
   };
 
-  // ==================== CERTIFICATE UPLOAD FUNCTIONS ====================
 
   /**
    * @param {Event} event - The file input change event
@@ -322,28 +321,26 @@ export default function AddDoctor() {
               </FormControl>
             </Flex>
 
-            {/* This section appears after specialization for certificate upload */}
+            {/* section for certificate upload */}
             <Card mt={5} bg={useColorModeValue("gray.50", "gray.600")}>
               <CardBody p={3}>
                 <Text fontSize="md" fontWeight="bold" mb={3}>
-                  Doctor Certificate (Optional)
+                  Doctor Certificate
                 </Text>
                 <Text fontSize="xs" color="gray.500" mb={3}>
                   Upload doctor's certificate for QR code verification (JPG, PNG, PDF - Max 2MB)
                 </Text>
                 
                 <VStack spacing={3} align="stretch">
-                  {/* ========== CERTIFICATE FILE INPUT ========== */}
                   <Input
                     size={"sm"}
                     borderRadius={6}
                     type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"  // Only accept these file types
-                    onChange={handleCertificateChange}  // Handle file selection
+                    accept=".jpg,.jpeg,.png,.pdf"  
+                    onChange={handleCertificateChange} 
                   />
                   
-                  {/* ========== CERTIFICATE PREVIEW SECTION ========== */}
-                  {/* Shows preview for image files (not PDFs) */}
+                  {/* CERTIFICATE PREVIEW SECTION */}
                   {certificatePreview && (
                     <Box mt={2}>
                       <Text fontSize="sm" fontWeight="medium" mb={2}>
@@ -372,8 +369,7 @@ export default function AddDoctor() {
                     </Box>
                   )}
 
-                  {/* ========== PDF FILE INDICATOR ========== */}
-                  {/* Shows when PDF file is selected (no preview available) */}
+                  {/* PDF FILE preview available) */}
                   {certificateFile && certificateFile.type === 'application/pdf' && (
                     <Box mt={2} p={3} border="1px" borderColor="blue.200" borderRadius="md" bg="blue.50">
                       <Flex align="center" justify="space-between">
@@ -392,17 +388,14 @@ export default function AddDoctor() {
                     </Box>
                   )}
 
-                  {/* ========== CERTIFICATE UPLOAD INFO ========== */}
+                   {/* CERTIFICATE UPLOAD INFO  */}
                   <Text fontSize="xs" color="gray.600" mt={2}>
-                    💡 This certificate will be used for QR code verification. 
-                    Users can scan the QR code on the doctor profile to view this certificate.
+                    Users can scan the QR code on the doctor profile page to view this certificate.
                   </Text>
                 </VStack>
               </CardBody>
             </Card>
-            {/* ==================== END OF CERTIFICATE UPLOAD SECTION ==================== */}
 
-            {/* ========== SUBMIT BUTTON ========== */}
             <Button
               w={"100%"}
               mt={10}
