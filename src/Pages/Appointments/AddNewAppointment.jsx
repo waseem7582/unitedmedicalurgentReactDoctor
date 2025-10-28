@@ -26,10 +26,11 @@ import {
   Select,
   useDisclosure,
   useToast,
+  Text, // NEW: Import Text component for Out Call section
 } from "@chakra-ui/react";
 import useDoctorData from "../../Hooks/UseDoctorData";
 import usePatientData from "../../Hooks/UsePatientsData";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // NEW: Added useEffect for cleanup
 import UsersCombobox from "../../components/UsersComboBox";
 import moment from "moment";
 import { ChevronDownIcon } from "lucide-react";
@@ -57,6 +58,12 @@ const getTypeBadge = (type) => {
           {type}
         </Badge>
       );
+     case "Out Call": // NEW: Out Call badge
+      return (
+        <Badge colorScheme="purple" p={"5px"} px={10}>
+          🏠 {type}
+        </Badge>
+      );
     default:
       return (
         <Badge colorScheme="blue" p={"5px"} px={10}>
@@ -73,6 +80,8 @@ const getFee = (type, doct) => {
       return doct?.opd_fee;
     case "Video Consultant":
       return doct?.video_fee;
+    case "Out Call": // NEW: Out Call fee
+      return doct?.out_call_fee || 600;
     default:
       return doct?.emg_fee;
   }
@@ -133,6 +142,21 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
   const [paymentMathod, setpaymentMathod] = useState();
   const queryClient = useQueryClient();
   const [defalutDataForPationt, setdefalutDataForPationt] = useState(PatientID);
+    // NEW: State variables for Out Call address fields
+  const [outCallAddress, setOutCallAddress] = useState("");
+  const [outCallCity, setOutCallCity] = useState("");
+  const [outCallLandmark, setOutCallLandmark] = useState("");
+  const [outCallInstructions, setOutCallInstructions] = useState("");
+
+    // NEW: Clean up Out Call fields when type changes
+  useEffect(() => {
+    if (type !== "Out Call") {
+      setOutCallAddress("");
+      setOutCallCity("");
+      setOutCallLandmark("");
+      setOutCallInstructions("");
+    }
+  }, [type]);
 
   //   doctorDetails
   const { data: doctorDetails, isLoading: isDoctLoading } = useQuery({
@@ -154,6 +178,11 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
     if (!status) return "Appointment status";
     if (!paymentStatus) return "Payment Status";
     if (paymentStatus === "Paid" && !paymentMathod) return "Payment Method";
+    // NEW: Out Call specific validation
+    if (type === "Out Call") {
+      if (!outCallAddress.trim()) return "Out Call Address";
+      if (!outCallCity.trim()) return "Out Call City";
+    }
     return null; // All values are present
   };
   const mutation = useMutation({
@@ -184,6 +213,13 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
           is_wallet_txn: 0,
           payment_status: paymentStatus,
           source: "Admin",
+           // NEW: Include Out Call fields in API request
+          ...(type === "Out Call" && {
+            out_call_address: outCallAddress,
+            out_call_city: outCallCity,
+            out_call_landmark: outCallLandmark,
+            out_call_instructions: outCallInstructions,
+          }),
         };
         await addAppointment(formData);
       }
@@ -283,7 +319,7 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
                         {type ? getTypeBadge(type) : "Select Appointment Type"}
                       </MenuButton>
                       <MenuList>
-                        {["OPD", "Video Consultant", "Emergency"]?.map(
+                        {["OPD", "Video Consultant", "Emergency", "Out Call"]?.map(
                           (option) => (
                             <MenuItem
                               key={option}
@@ -431,6 +467,69 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
                     </Menu>
                   </FormControl>
                 </Flex>
+                {/* NEW: Out Call Address Fields Section */}
+                {type === "Out Call" && (
+                  <Box mt={4} p={3} bg="purple.50" borderRadius="md" border="1px solid" borderColor="purple.200">
+                    <Text fontSize={14} fontWeight={600} mb={2} color="purple.700">
+                      🏠 Visit Location Details
+                    </Text>
+                    <Flex gap={3} direction={"column"}>
+                      <FormControl isRequired>
+                        <FormLabel fontSize={"xs"} mb={0} color="gray.600">
+                          Address
+                        </FormLabel>
+                        <Input
+                          size={"sm"}
+                          placeholder="Enter complete address"
+                          value={outCallAddress}
+                          onChange={(e) => setOutCallAddress(e.target.value)}
+                          bg="white"
+                        />
+                      </FormControl>
+                      
+                      <Flex gap={3}>
+                        <FormControl isRequired>
+                          <FormLabel fontSize={"xs"} mb={0} color="gray.600">
+                            City
+                          </FormLabel>
+                          <Input
+                            size={"sm"}
+                            placeholder="Enter city"
+                            value={outCallCity}
+                            onChange={(e) => setOutCallCity(e.target.value)}
+                            bg="white"
+                          />
+                        </FormControl>
+
+                        <FormControl>
+                          <FormLabel fontSize={"xs"} mb={0} color="gray.600">
+                            Landmark
+                          </FormLabel>
+                          <Input
+                            size={"sm"}
+                            placeholder="Nearby landmark (optional)"
+                            value={outCallLandmark}
+                            onChange={(e) => setOutCallLandmark(e.target.value)}
+                            bg="white"
+                          />
+                        </FormControl>
+                      </Flex>
+
+                      <FormControl>
+                        <FormLabel fontSize={"xs"} mb={0} color="gray.600">
+                          Special Instructions
+                        </FormLabel>
+                        <Input
+                          size={"sm"}
+                          placeholder="Any special instructions for the doctor"
+                          value={outCallInstructions}
+                          onChange={(e) => setOutCallInstructions(e.target.value)}
+                          bg="white"
+                        />
+                      </FormControl>
+                    </Flex>
+                  </Box>
+                )}
               </CardBody>
             </Card>
             <Card mt={5} bg={useColorModeValue("white", "gray.700")}>

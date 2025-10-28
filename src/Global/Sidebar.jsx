@@ -32,6 +32,7 @@ import {
   Tooltip,
   useColorModeValue,
   useMediaQuery,
+  Image,
 } from "@chakra-ui/react";
 import { Link, useLocation } from "react-router-dom"; // Import the custom hook
 import useHasPermission from "../Hooks/HasPermission";
@@ -170,9 +171,18 @@ export default function Sidebar() {
           justifyContent={isOpen ? "space-between" : "center"}
         >
           {isOpen && (
-            <Text fontSize="xl" fontFamily="monospace" fontWeight="semi-bold">
-              {title?.value || admin?.role.name}
-            </Text>
+            <Flex alignItems="center" gap={2}>
+              <Image 
+                src="http://127.0.0.1:8000/storage/configurations/2025-10-09-68e843aeaa97c.png"
+                alt="Website Logo"
+                h="28px"
+                w="auto"
+                objectFit="contain"
+              />
+              <Text fontSize="xs" fontFamily="monospace" fontWeight="normal">
+                {title?.value || admin?.role.name}
+              </Text>
+            </Flex>
           )}
           <IconButton
             onClick={() => {

@@ -36,6 +36,7 @@ import {
   useDisclosure,
   Link,
   theme,
+  Text, // NEW: Import Text component for Out Call display
 } from "@chakra-ui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, Link as RouterLink } from "react-router-dom";
@@ -60,6 +61,8 @@ import useHasPermission from "../../Hooks/HasPermission";
 import PatientFiles from "../Patients/PatientFiles";
 import { FaPrint } from "react-icons/fa";
 import api from "../../Controllers/api";
+// NEW: Import map icons
+import { FaMapMarkerAlt, FaDirections } from "react-icons/fa";
 
 let defStatusOPD = ["Pending", "Confirmed", "Rejected", "Visited"];
 let defStatusVedio = ["Pending", "Confirmed", "Rejected", "Completed"];
@@ -86,6 +89,12 @@ const getTypeBadge = (type) => {
           {type}
         </Badge>
       );
+    case "Out Call": // NEW: Out Call badge
+      return (
+        <Badge colorScheme="purple" p={"5px"} px={10}>
+          🏠 {type}
+        </Badge>
+      );
     default:
       return (
         <Badge colorScheme="green" p={"5px"} px={10}>
@@ -93,6 +102,16 @@ const getTypeBadge = (type) => {
         </Badge>
       );
   }
+};
+
+// NEW: Function to generate Google Maps URLs
+const getGoogleMapsUrl = (address, city, landmark) => {
+  const fullAddress = `${address}, ${city}${landmark ? `, ${landmark}` : ''}`;
+  const encodedAddress = encodeURIComponent(fullAddress);
+  return {
+    view: `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`,
+    directions: `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`
+  };
 };
 
 const handleUpdate = async (data) => {
@@ -625,6 +644,108 @@ export default function UpdateAppointment() {
                             </Menu>
                           </FormControl>
                         </Flex>
+                        {/* UPDATED: Out Call Location Display Section with Map Buttons */}
+                        {appointmntData.type === "Out Call" && (
+                          <Box mt={4} p={3} bg="purple.50" borderRadius="md" border="1px solid" borderColor="purple.200">
+                            <Flex justify="space-between" align="center" mb={2}>
+                              <Text fontSize={14} fontWeight={600} color="purple.700">
+                                🏠 Visit Location
+                              </Text>
+                              {/* NEW: Map Action Buttons */}
+                              {appointmntData.out_call_address && appointmntData.out_call_city && (
+                                <Flex gap={2}>
+                                  <Button
+                                    size="xs"
+                                    colorScheme="blue"
+                                    leftIcon={<FaMapMarkerAlt />}
+                                    as={Link}
+                                    href={getGoogleMapsUrl(
+                                      appointmntData.out_call_address,
+                                      appointmntData.out_call_city,
+                                      appointmntData.out_call_landmark
+                                    ).view}
+                                    isExternal
+                                  >
+                                    View in Maps
+                                  </Button>
+                                  <Button
+                                    size="xs"
+                                    colorScheme="green"
+                                    leftIcon={<FaDirections />}
+                                    as={Link}
+                                    href={getGoogleMapsUrl(
+                                      appointmntData.out_call_address,
+                                      appointmntData.out_call_city,
+                                      appointmntData.out_call_landmark
+                                    ).directions}
+                                    isExternal
+                                  >
+                                    Get Directions
+                                  </Button>
+                                </Flex>
+                              )}
+                            </Flex>
+                            <Flex gap={3} direction={"column"}>
+                              <FormControl>
+                                <FormLabel fontSize={"xs"} mb={0} color="gray.600">
+                                  Address
+                                </FormLabel>
+                                <Input
+                                  size={"xs"}
+                                  isReadOnly
+                                  fontWeight={500}
+                                  variant="filled"
+                                  value={appointmntData.out_call_address}
+                                  bg="white"
+                                />
+                              </FormControl>
+                              
+                              <Flex gap={3}>
+                                <FormControl>
+                                  <FormLabel fontSize={"xs"} mb={0} color="gray.600">
+                                    City
+                                  </FormLabel>
+                                  <Input
+                                    size={"xs"}
+                                    isReadOnly
+                                    fontWeight={500}
+                                    variant="filled"
+                                    value={appointmntData.out_call_city}
+                                    bg="white"
+                                  />
+                                </FormControl>
+
+                                <FormControl>
+                                  <FormLabel fontSize={"xs"} mb={0} color="gray.600">
+                                    Landmark
+                                  </FormLabel>
+                                  <Input
+                                    size={"xs"}
+                                    isReadOnly
+                                    fontWeight={500}
+                                    variant="filled"
+                                    value={appointmntData.out_call_landmark || "Not specified"}
+                                    bg="white"
+                                  />
+                                </FormControl>
+                              </Flex>
+
+                              <FormControl>
+                                <FormLabel fontSize={"xs"} mb={0} color="gray.600">
+                                  Instructions
+                                </FormLabel>
+                                <Input
+                                  size={"xs"}
+                                  isReadOnly
+                                  fontWeight={500}
+                                  variant="filled"
+                                  value={appointmntData.out_call_instructions || "No special instructions"}
+                                  bg="white"
+                                />
+                              </FormControl>
+                            </Flex>
+                          </Box>
+                        )}
                       </CardBody>
                     </Card>
                   </Box>{" "}
